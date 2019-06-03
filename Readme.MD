@@ -8,5 +8,5 @@ For build start your gradle, e.g.:
 
 and than run the application from your build directory, e.g.:
 ```java
-java -jar /Users/grow/IdeaProjects/blackmoon/app/build/libs/blackmoon-1.0.0.jar
+java -jar /Users/grow/IdeaProjects/blackmoon.server/app/build/libs/blackmoon-1.0.0.jar
 ```
