@@ -1,6 +1,6 @@
 package net.robomix.blackmoon.controllers;
 
-import net.robomix.blackmoon.domain.models.ProjectModel;
+import net.robomix.blackmoon.domain.models.Project;
 import net.robomix.blackmoon.domain.repos.ProjectRepo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +24,7 @@ public class PageController {
 
     @GetMapping("/projects")
     public String projectsPage(Map<String, Object> model) {
-        List<ProjectModel> projects = projectRepo.findAll();
+        List<Project> projects = projectRepo.findAll();
 
         model.put("message", "with ftl template");
         model.put("projects", projects);
