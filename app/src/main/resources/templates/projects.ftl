@@ -1,7 +1,6 @@
-<#import "parts/common.ftl" as c>
-<@c.page>
-    <div>Hello, World! ${message}</div>
+<#import "parts/common.ftl" as common>
 
+<@common.page title = "Projects Page | Black Moon Server Side">
     <#if projects??>
         <#list projects as project>
             <p>${project.getProjectName()}</p>
@@ -10,4 +9,4 @@
         </#list>
     </#if>
 
-</@c.page>
+</@common.page>

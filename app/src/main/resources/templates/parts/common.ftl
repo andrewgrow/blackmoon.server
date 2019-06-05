@@ -1,10 +1,10 @@
-<#macro page>
+<#macro page title>
     <!DOCTYPE html>
     <html lang="en">
 
     <head>
         <meta charset="UTF-8">
-        <title>BlackMoon Server Side</title>
+        <title>${title?html}</title>
     </head>
 
     <body>
