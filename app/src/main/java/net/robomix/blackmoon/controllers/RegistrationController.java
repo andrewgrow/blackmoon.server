@@ -1,8 +1,8 @@
 package net.robomix.blackmoon.controllers;
 
-import net.robomix.blackmoon.domain.models.Role;
-import net.robomix.blackmoon.domain.models.User;
-import net.robomix.blackmoon.domain.repos.UserRepo;
+import net.robomix.blackmoon.database.models.Role;
+import net.robomix.blackmoon.database.models.User;
+import net.robomix.blackmoon.database.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

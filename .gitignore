@@ -113,3 +113,5 @@ hs_err_pid*
 .idea/
 build/
 */build/
+*/file_storage/
+/file_storage/

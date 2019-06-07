@@ -1,7 +1,7 @@
 package net.robomix.blackmoon.service;
 
-import net.robomix.blackmoon.domain.models.User;
-import net.robomix.blackmoon.domain.repos.UserRepo;
+import net.robomix.blackmoon.database.models.User;
+import net.robomix.blackmoon.database.repos.UserRepo;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
