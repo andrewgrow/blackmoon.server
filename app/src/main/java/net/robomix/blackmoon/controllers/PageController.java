@@ -1,7 +1,9 @@
 package net.robomix.blackmoon.controllers;
 
 import net.robomix.blackmoon.domain.models.Project;
+import net.robomix.blackmoon.domain.models.User;
 import net.robomix.blackmoon.domain.repos.ProjectRepo;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -18,7 +20,8 @@ public class PageController {
     }
 
     @GetMapping("/")
-    public String siteEnterPage(Map<String, Object> model) {
+    public String siteEnterPage(@AuthenticationPrincipal User user, Map<String, Object> model) {
+        model.put("user", user);
         return "site_enter";
     }
 
