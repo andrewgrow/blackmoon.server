@@ -13,7 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -21,7 +25,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Controller
-public class ProjectsController {
+public class ProjectsController implements HandlerExceptionResolver {
 
     @Autowired
     private ProjectRepo projectRepo;
@@ -31,7 +35,6 @@ public class ProjectsController {
 
     @Value("${upload.path}")
     private String uploadPath;
-
 
     @PostMapping("/projects")
     public String addNewProject(@RequestParam(value = "file", required = false) MultipartFile[] webFilesList,
@@ -84,5 +87,17 @@ public class ProjectsController {
 //        model.put("message", "with ftl template");
         model.put("projects", projects);
         return "projects";
+    }
+
+    @Override
+    public ModelAndView resolveException(HttpServletRequest request,
+                 HttpServletResponse response, Object handler, Exception ex) {
+        ModelAndView modelAndView = new ModelAndView("projects");
+        List<Project> projects = projectRepo.findAll();
+        modelAndView.addObject("projects", projects);
+        modelAndView.addObject("error", "New Project was " +
+                "not created because selected files are too long!  You can " +
+                "add each file as 2Mb and max 6Mb per time.");
+        return modelAndView;
     }
 }

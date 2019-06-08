@@ -12,3 +12,11 @@
     </body>
     </html>
 </#macro>
+
+<#macro show_error alert>
+    <div>
+        <p>
+            Error: ${alert}
+        </p>
+    </div>
+</#macro>

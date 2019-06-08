@@ -4,6 +4,11 @@
 
 <@common.page title = "Projects Page | Black Moon Server Side">
 
+
+    <#if error??>
+        <@common.show_error alert="${error}"  />
+    </#if>
+
     <div>
         <p>
             <@forms.add_new_project />
