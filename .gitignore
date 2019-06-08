@@ -115,3 +115,4 @@ build/
 */build/
 */file_storage/
 /file_storage/
+**/local.properties

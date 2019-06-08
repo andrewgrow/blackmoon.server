@@ -34,7 +34,7 @@ public class ProjectsController {
 
 
     @PostMapping("/projects")
-    public String addNewProject(@RequestParam(value = "file", required = false) MultipartFile newProjectFile,
+    public String addNewProject(@RequestParam(value = "file", required = false) MultipartFile[] webFilesList,
                            @RequestParam(value = "name", required = false) String newProjectName,
                            @RequestParam(value = "short", required = false) String shortDescription,
                            @RequestParam(value = "long", required = false) String longDescription,
@@ -51,18 +51,23 @@ public class ProjectsController {
             project.setLongDescription(longDescription);
             projectRepo.save(project);
 
-            if (newProjectFile != null) {
-                File uploadDir = new File(uploadPath);
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdir();
+            if (webFilesList != null && webFilesList.length > 0) {
+                for (MultipartFile webFile : webFilesList) {
+                    if (webFile.isEmpty()) {
+                        continue;
+                    }
+                    File uploadDir = new File(uploadPath);
+                    if (!uploadDir.exists()) {
+                        uploadDir.mkdir();
+                    }
+                    String uuid = UUID.randomUUID().toString();
+                    String filePath = uploadPath + "/" + uuid + "." + webFile.getOriginalFilename();
+
+                    webFile.transferTo(new File(filePath));
+
+                    ProjectFile projectFile = new ProjectFile(project, filePath);
+                    filesRepo.save(projectFile);
                 }
-                String uuid = UUID.randomUUID().toString();
-                String fileName = uploadPath + "/" + uuid + "." + newProjectFile.getOriginalFilename();
-
-                newProjectFile.transferTo(new File(fileName));
-
-                ProjectFile projectFile = new ProjectFile(project, fileName);
-                filesRepo.save(projectFile);
             }
         }
 
