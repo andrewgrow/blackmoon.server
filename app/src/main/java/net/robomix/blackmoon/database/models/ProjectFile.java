@@ -1,5 +1,7 @@
 package net.robomix.blackmoon.database.models;
 
+import net.robomix.blackmoon.utils.Utils;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,12 +16,19 @@ public class ProjectFile {
     @ManyToOne(fetch = FetchType.EAGER)
     private Project project;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User author;
+
     private long dateCreated;
 
-    public ProjectFile(Project project, String path) {
+    private String fileHash;
+
+    public ProjectFile(Project project, String path, User author) {
         this.project = project;
         this.path = path;
         this.dateCreated = System.currentTimeMillis();
+        this.fileHash = Utils.getHashFromFile(path);
+        this.author = author;
     }
 
     public long getId() {
@@ -52,5 +61,21 @@ public class ProjectFile {
 
     public void setDateCreated(long dateCreated) {
         this.dateCreated = dateCreated;
+    }
+
+    public String getFileHash() {
+        return fileHash;
+    }
+
+    public void setFileHash(String fileHash) {
+        this.fileHash = fileHash;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 }

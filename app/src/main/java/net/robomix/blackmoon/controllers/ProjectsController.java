@@ -1,12 +1,10 @@
 package net.robomix.blackmoon.controllers;
 
-import net.robomix.blackmoon.database.models.ProjectFile;
 import net.robomix.blackmoon.database.models.Project;
 import net.robomix.blackmoon.database.models.User;
-import net.robomix.blackmoon.database.repos.FilesRepo;
-import net.robomix.blackmoon.database.repos.ProjectRepo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import net.robomix.blackmoon.service.ProjectService;
+import net.robomix.blackmoon.utils.TextUtils;
+import net.robomix.blackmoon.utils.Utils;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,71 +16,69 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Controller
 public class ProjectsController implements HandlerExceptionResolver {
 
-    @Autowired
-    private ProjectRepo projectRepo;
+    private final ProjectService projectService;
 
-    @Autowired
-    private FilesRepo filesRepo;
-
-    @Value("${upload.path}")
-    private String uploadPath;
+    public ProjectsController(ProjectService projectService) {
+        this.projectService = projectService;
+    }
 
     @PostMapping("/projects")
-    public String addNewProject(@RequestParam(value = "file", required = false) MultipartFile[] webFilesList,
+    public String addNewProject(@RequestParam(value = "file", required = false) MultipartFile[] attachmentsList,
                            @RequestParam(value = "name", required = false) String newProjectName,
                            @RequestParam(value = "short", required = false) String shortDescription,
                            @RequestParam(value = "long", required = false) String longDescription,
-                           @AuthenticationPrincipal User user,
-                                   Map<String, Object> model) throws IOException {
-        if (newProjectName != null) {
-            Project project = new Project();
-            project.setName(newProjectName);
-            project.setAuthor(user);
-            long time = System.currentTimeMillis();
-            project.setDateCreated(time);
-            project.setDateLastModified(time);
-            project.setShortDescription(shortDescription);
-            project.setLongDescription(longDescription);
-            projectRepo.save(project);
+                           @AuthenticationPrincipal User user, Map<String, Object> model)
+            throws IOException {
 
-            if (webFilesList != null && webFilesList.length > 0) {
-                for (MultipartFile webFile : webFilesList) {
-                    if (webFile.isEmpty()) {
-                        continue;
-                    }
-                    File uploadDir = new File(uploadPath);
-                    if (!uploadDir.exists()) {
-                        uploadDir.mkdir();
-                    }
-                    String uuid = UUID.randomUUID().toString();
-                    String filePath = uploadPath + "/" + uuid + "." + webFile.getOriginalFilename();
+        List<String> errorsList = new ArrayList<>();
 
-                    webFile.transferTo(new File(filePath));
+        // check name and user
+        if (newProjectName != null && user != null) {
 
-                    ProjectFile projectFile = new ProjectFile(project, filePath);
-                    filesRepo.save(projectFile);
+            // save new project
+            Project project = projectService.saveNewProject(newProjectName, user,
+                    shortDescription, longDescription);
+
+            if (project == null) {
+                errorsList.add("Sorry, but project was not saved. Something went wrong.");
+            } else {
+                // save files for project
+                String errorWhileSave = projectService.saveNewProjectFiles(project,
+                        attachmentsList, user);
+
+                // if we have an error after saving we will show it
+                if (!TextUtils.isEmpty(errorWhileSave)) {
+                    errorsList.add(errorWhileSave);
                 }
             }
+        } else {
+            // error: we do not have a new project name or we have an empty user
+            errorsList.add("Sorry, but you have to set a name for the project.");
         }
 
 
-        List<Project> projects = projectRepo.findAll();
+        List<Project> projects = projectService.findAll();
         model.put("projects", projects);
+
+        if (errorsList.size() > 0) {
+            String error = Utils.convertErrorsListToString(errorsList);
+            model.put("error", error);
+        }
+
         return "projects";
     }
 
     @GetMapping("/projects")
     public String projectsPage(Map<String, Object> model) {
-        List<Project> projects = projectRepo.findAll();
+        List<Project> projects = projectService.findAll();
 
 //        model.put("message", "with ftl template");
         model.put("projects", projects);
@@ -93,7 +89,7 @@ public class ProjectsController implements HandlerExceptionResolver {
     public ModelAndView resolveException(HttpServletRequest request,
                  HttpServletResponse response, Object handler, Exception ex) {
         ModelAndView modelAndView = new ModelAndView("projects");
-        List<Project> projects = projectRepo.findAll();
+        List<Project> projects = projectService.findAll();
         modelAndView.addObject("projects", projects);
         modelAndView.addObject("error", "New Project was " +
                 "not created because selected files are too long!  You can " +
