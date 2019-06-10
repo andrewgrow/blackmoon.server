@@ -4,9 +4,20 @@
 <@common.page title="Login Page | Black moon Server Side">
 
     <#if RequestParameters.logout??>
-        <div><p>You have been logged out.</p></div>
+        <div><p>You have been logged out. Want to login again?</p></div>
+
     <#elseif RequestParameters.error??>
         <div><p>Invalid username and password.</p></div>
+    <#else>
+        <#if message??>
+            <div><p>${message}</p></div>
+        <#else>
+            <div><p>You have to login or registration.</p></div>
+        </#if>
     </#if>
+
     <div><p><@auth_form.login_or_registration path="/login" /></div></p>
+    <br/><br/><br/>
+    <div><p><a href="/registration">REGISTRATION</div></p>
+
 </@common.page>

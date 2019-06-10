@@ -1,6 +1,8 @@
 package net.robomix.blackmoon.database.models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "prj")
@@ -17,9 +19,14 @@ public class Project {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private User author;
-
     private long dateCreated;
     private long dateLastModified;
+
+    @OneToMany(mappedBy = "project")
+    private List<ProjectFile> projectFiles = new ArrayList();
+
+    public Project() {
+    }
 
     public long getId() {
         return id;
@@ -75,5 +82,13 @@ public class Project {
 
     public void setDateLastModified(long dateLastModified) {
         this.dateLastModified = dateLastModified;
+    }
+
+    public List<ProjectFile> getProjectFiles() {
+        return projectFiles;
+    }
+
+    public void setProjectFiles(List<ProjectFile> projectFiles) {
+        this.projectFiles = projectFiles;
     }
 }

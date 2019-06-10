@@ -25,33 +25,35 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String addUser(User userWebForm,
+    public String addUser(User userDTO,
                           @RequestParam(name = "password_confirm") String passwordConfirm,
                           Map<String, Object> model) {
-        User userFromDb = userService.findByUsername(userWebForm.getUsername());
+        User userFromDb = userService.findByUsername(userDTO.getUsername());
         if (userFromDb != null) {
             model.put("error", "User already exists!");
             return "registration";
         }
 
-        if (TextUtils.isEmpty(userWebForm.getEmail())) {
+        if (TextUtils.isEmpty(userDTO.getEmail())) {
             model.put("error", "Email field is empty. Please, add your email.");
             return "registration";
         }
 
-        if (TextUtils.isEmpty(userWebForm.getPassword())) {
+        if (TextUtils.isEmpty(userDTO.getPassword())) {
             model.put("error", "Password field is empty. Please, add your password.");
             return "registration";
         }
 
-        if (!userWebForm.getPassword().equals(passwordConfirm)) {
+        if (!userDTO.getPassword().equals(passwordConfirm)) {
             model.put("error", "Password confirm does not match. " +
                     "Please, add your password and its confirm.");
             return "registration";
         }
 
-        userService.saveNewUser(userWebForm);
+        userService.saveNewUser(userDTO);
 
+        model.put("message", "Registration successful. You can login now.");
+        model.put("username", userDTO.getUsername());
         return "redirect:/login";
     }
 }

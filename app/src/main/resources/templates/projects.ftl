@@ -19,7 +19,13 @@
         <p>
             <#if projects??>
             <#list projects as project>
-                <p>${project.getName()}</p>
+                <div><p>${project.getName()}</p></div>
+                <div>
+                    <#list project.getProjectFiles() as image>
+                        <p>${image.getPath()}</p>
+                        <p><img src="/img/${image.getPath()}" /></p>
+                    </#list>
+                </div>
             <#else>
                 <div><!-- nothing to show yet --></div>
             </#list>

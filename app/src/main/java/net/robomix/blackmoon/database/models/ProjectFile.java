@@ -12,6 +12,7 @@ public class ProjectFile {
     private long id;
 
     private String path;
+    private String mimeType;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Project project;
@@ -23,12 +24,16 @@ public class ProjectFile {
 
     private String fileHash;
 
-    public ProjectFile(Project project, String path, User author) {
+    public ProjectFile() {
+    }
+
+    public ProjectFile(Project project, String path, User author, String mimeType) {
         this.project = project;
         this.path = path;
         this.dateCreated = System.currentTimeMillis();
         this.fileHash = Utils.getHashFromFile(path);
         this.author = author;
+        this.mimeType = mimeType;
     }
 
     public long getId() {
@@ -77,5 +82,13 @@ public class ProjectFile {
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
     }
 }

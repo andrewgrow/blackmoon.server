@@ -94,7 +94,7 @@ public class ProjectService {
                         String mimeType = new MimetypesFileTypeMap().getContentType(destinationFile);
                         if (mimeType.startsWith("image/")) {
                             // Well, it's an image.
-                            ProjectFile projectFile = new ProjectFile(project, filePath, user);
+                            ProjectFile projectFile = new ProjectFile(project, filePath, user, mimeType);
                             filesRepo.save(projectFile);
                         } else {
                             // if it's not an image - delete wrong file
