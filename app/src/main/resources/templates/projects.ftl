@@ -23,7 +23,7 @@
                 <div>
                     <#list project.getProjectFiles() as image>
                         <p>${image.getPath()}</p>
-                        <p><img src="/img/${image.getPath()}" /></p>
+                        <p><img width="100px;" src="/img/${image.getPath()}" /></p>
                     </#list>
                 </div>
             <#else>

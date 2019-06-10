@@ -81,11 +81,12 @@ public class ProjectService {
                 }
                 // make random name
                 String uuid = UUID.randomUUID().toString();
-                String filePath = uploadPath + "/" + uuid + "." + attachment.getOriginalFilename();
+                String shortPath = uuid + "." + attachment.getOriginalFilename();
+                String fullPath = uploadPath + "/" + shortPath;
 
                 try {
                     // copy to destination file
-                    File destinationFile = new File(filePath);
+                    File destinationFile = new File(fullPath);
                     attachment.transferTo(destinationFile);
 
                     // check if copy was successful
@@ -94,7 +95,7 @@ public class ProjectService {
                         String mimeType = new MimetypesFileTypeMap().getContentType(destinationFile);
                         if (mimeType.startsWith("image/")) {
                             // Well, it's an image.
-                            ProjectFile projectFile = new ProjectFile(project, filePath, user, mimeType);
+                            ProjectFile projectFile = new ProjectFile(project, fullPath, shortPath, user, mimeType);
                             filesRepo.save(projectFile);
                         } else {
                             // if it's not an image - delete wrong file

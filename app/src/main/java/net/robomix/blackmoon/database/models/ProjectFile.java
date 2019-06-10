@@ -27,11 +27,11 @@ public class ProjectFile {
     public ProjectFile() {
     }
 
-    public ProjectFile(Project project, String path, User author, String mimeType) {
+    public ProjectFile(Project project, String fullPath, String path, User author, String mimeType) {
         this.project = project;
         this.path = path;
         this.dateCreated = System.currentTimeMillis();
-        this.fileHash = Utils.getHashFromFile(path);
+        this.fileHash = Utils.getHashFromFile(fullPath);
         this.author = author;
         this.mimeType = mimeType;
     }
