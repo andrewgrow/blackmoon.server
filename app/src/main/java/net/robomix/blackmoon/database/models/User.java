@@ -15,10 +15,14 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "_id")
     private long id;
+    @Column(columnDefinition = "TEXT")
     private String username;
+    @Column(columnDefinition = "TEXT")
     private String password;
     private boolean active;
+    @Column(columnDefinition = "TEXT")
     private String email;
+    @Column(columnDefinition = "TEXT")
     private String phone;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)

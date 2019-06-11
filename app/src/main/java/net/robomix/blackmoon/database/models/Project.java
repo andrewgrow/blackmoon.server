@@ -13,8 +13,11 @@ public class Project {
     @Column(name = "_id")
     private long id;
 
+    @Column(columnDefinition = "TEXT")
     private String name;
+    @Column(columnDefinition = "TEXT")
     private String shortDescription;
+    @Column(columnDefinition = "TEXT")
     private String longDescription;
 
     @ManyToOne(fetch = FetchType.EAGER)

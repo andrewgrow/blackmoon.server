@@ -82,7 +82,7 @@ public class ProjectService {
                 // make random name
                 String uuid = UUID.randomUUID().toString();
                 String shortPath = uuid + "." + attachment.getOriginalFilename();
-                String fullPath = uploadPath + "/" + shortPath;
+                String fullPath = getFullPath(shortPath);
 
                 try {
                     // copy to destination file
@@ -97,6 +97,8 @@ public class ProjectService {
                             // Well, it's an image.
                             ProjectFile projectFile = new ProjectFile(project, fullPath, shortPath, user, mimeType);
                             filesRepo.save(projectFile);
+                            // remove it if the file has the same duplicate
+                            removeDuplicate(projectFile.getFileHash(), shortPath);
                         } else {
                             // if it's not an image - delete wrong file
                             destinationFile.delete();
@@ -119,5 +121,28 @@ public class ProjectService {
             }
         }
         return error;
+    }
+
+    private String getFullPath(String shortPath){
+        return uploadPath + "/" + shortPath;
+    }
+
+    private void removeDuplicate(String fileHash, String shortPath) {
+        List<ProjectFile> fileList = filesRepo.findAllByFileHash(fileHash);
+        if (fileList != null && fileList.size() > 1) {
+            // remove all copies but change full path
+            String fullPath;
+            File file;
+            for (ProjectFile projectFile : fileList) {
+                String filePath = projectFile.getPath();
+                if (!filePath.equals(shortPath)) {
+                    fullPath = getFullPath(projectFile.getPath());
+                    file = new File(fullPath);
+                    file.delete();
+                    projectFile.setPath(shortPath);
+                    filesRepo.save(projectFile);
+                }
+            }
+        }
     }
 }

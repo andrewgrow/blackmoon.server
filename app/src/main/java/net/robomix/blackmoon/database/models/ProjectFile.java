@@ -11,7 +11,9 @@ public class ProjectFile {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Column(columnDefinition = "TEXT")
     private String path;
+    @Column(columnDefinition = "TEXT")
     private String mimeType;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -22,6 +24,7 @@ public class ProjectFile {
 
     private long dateCreated;
 
+    @Column(columnDefinition = "TEXT")
     private String fileHash;
 
     public ProjectFile() {

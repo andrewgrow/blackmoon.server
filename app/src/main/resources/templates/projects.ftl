@@ -18,17 +18,25 @@
     <div>
         <p>
             <#if projects??>
-            <#list projects as project>
-                <div><p>${project.getName()}</p></div>
-                <div>
-                    <#list project.getProjectFiles() as image>
-                        <p>${image.getPath()}</p>
-                        <p><img width="100px;" src="/img/${image.getPath()}" /></p>
-                    </#list>
-                </div>
-            <#else>
-                <div><!-- nothing to show yet --></div>
-            </#list>
+                <#list projects as project>
+                    <div><p>Project name: ${project.getName()}</p></div>
+                    <div><p>Short description: ${project.getShortDescription()}</p></div>
+                    <div><p>Long description: ${project.getLongDescription()}</p></div>
+                    <#if project.getProjectFiles()??>
+                        <div>
+                            <table>
+                                <tr>
+                                    <#list project.getProjectFiles() as image>
+                                        <td><img width="100px;" src="/img/${image.getPath()}" /></td>
+                                    </#list>
+                                </tr>
+                            </table>
+                        </div>
+                    </#if>
+                    <br/><br/>
+                <#else>
+                    <div><!-- nothing to show yet --></div>
+                </#list>
             </#if>
         </p>
     </div>
