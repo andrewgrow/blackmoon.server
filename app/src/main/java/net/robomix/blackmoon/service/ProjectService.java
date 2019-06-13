@@ -24,6 +24,7 @@ public class ProjectService {
     private String uploadPath;
     private final ProjectRepo projectRepo;
     private final FilesRepo filesRepo;
+    private static final String TAG = ProjectService.class.getSimpleName();
 
     public ProjectService(ProjectRepo projectRepo, FilesRepo filesRepo) {
         this.projectRepo = projectRepo;

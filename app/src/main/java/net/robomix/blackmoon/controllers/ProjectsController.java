@@ -16,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +23,7 @@ import java.util.Map;
 @Controller
 public class ProjectsController implements HandlerExceptionResolver {
 
+    private static final String TAG = ProjectsController.class.getSimpleName();
     private final ProjectService projectService;
 
     public ProjectsController(ProjectService projectService) {
@@ -35,8 +35,9 @@ public class ProjectsController implements HandlerExceptionResolver {
                            @RequestParam(value = "name", required = false) String newProjectName,
                            @RequestParam(value = "short", required = false) String shortDescription,
                            @RequestParam(value = "long", required = false) String longDescription,
-                           @AuthenticationPrincipal User user, Map<String, Object> model)
-            throws IOException {
+                           @AuthenticationPrincipal User user, Map<String, Object> model) {
+
+        System.out.println(TAG + "addNewProject() in thread " + Thread.currentThread().getName());
 
         List<String> errorsList = new ArrayList<>();
 
@@ -64,7 +65,6 @@ public class ProjectsController implements HandlerExceptionResolver {
             errorsList.add("Sorry, but you have to set a name for the project.");
         }
 
-
         List<Project> projects = projectService.findAll();
         model.put("projects", projects);
 
@@ -73,14 +73,12 @@ public class ProjectsController implements HandlerExceptionResolver {
             model.put("error", error);
         }
 
-        return "projects";
+        return "redirect:/projects";
     }
 
     @GetMapping("/projects")
     public String projectsPage(Map<String, Object> model) {
         List<Project> projects = projectService.findAll();
-
-//        model.put("message", "with ftl template");
         model.put("projects", projects);
         return "projects";
     }
@@ -88,12 +86,16 @@ public class ProjectsController implements HandlerExceptionResolver {
     @Override
     public ModelAndView resolveException(HttpServletRequest request,
                  HttpServletResponse response, Object handler, Exception ex) {
+        System.out.println(TAG + "resolveException() in thread " + Thread.currentThread().getName() + ". Message: " + ex.getMessage());
+        // stacktrace
+        ex.printStackTrace();
+
         ModelAndView modelAndView = new ModelAndView("projects");
         List<Project> projects = projectService.findAll();
         modelAndView.addObject("projects", projects);
         modelAndView.addObject("error", "New Project was " +
-                "not created because selected files are too long!  You can " +
-                "add each file as 2Mb and max 6Mb per time.");
+                "not created because an error occurred. Are selected files too long?  You can " +
+                "add each file as 2Mb and max 6Mb per time.\n\nError message: " + ex.getMessage());
         return modelAndView;
     }
 }
