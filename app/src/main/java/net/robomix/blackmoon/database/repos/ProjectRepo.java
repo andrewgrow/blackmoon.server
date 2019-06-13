@@ -1,6 +1,6 @@
 package net.robomix.blackmoon.database.repos;
 
-import net.robomix.blackmoon.database.models.Project;
+import net.robomix.blackmoon.database.models.db.Project;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

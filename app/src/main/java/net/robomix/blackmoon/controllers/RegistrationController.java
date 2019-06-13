@@ -1,6 +1,6 @@
 package net.robomix.blackmoon.controllers;
 
-import net.robomix.blackmoon.database.models.User;
+import net.robomix.blackmoon.database.models.db.User;
 import net.robomix.blackmoon.service.UserService;
 import net.robomix.blackmoon.utils.TextUtils;
 import org.springframework.stereotype.Controller;

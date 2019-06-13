@@ -1,13 +1,11 @@
 package net.robomix.blackmoon.service;
 
 import net.robomix.blackmoon.database.models.Role;
-import net.robomix.blackmoon.database.models.User;
+import net.robomix.blackmoon.database.models.db.User;
 import net.robomix.blackmoon.database.repos.UserRepo;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

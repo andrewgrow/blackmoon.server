@@ -1,5 +1,6 @@
-package net.robomix.blackmoon.database.models;
+package net.robomix.blackmoon.database.models.db;
 
+import net.robomix.blackmoon.database.models.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

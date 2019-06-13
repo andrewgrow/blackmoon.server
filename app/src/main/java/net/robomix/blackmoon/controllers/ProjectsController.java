@@ -1,7 +1,7 @@
 package net.robomix.blackmoon.controllers;
 
-import net.robomix.blackmoon.database.models.Project;
-import net.robomix.blackmoon.database.models.User;
+import net.robomix.blackmoon.database.models.db.Project;
+import net.robomix.blackmoon.database.models.db.User;
 import net.robomix.blackmoon.service.ProjectService;
 import net.robomix.blackmoon.utils.TextUtils;
 import net.robomix.blackmoon.utils.Utils;

@@ -1,4 +1,4 @@
-package net.robomix.blackmoon.database.models;
+package net.robomix.blackmoon.database.models.db;
 
 import javax.persistence.*;
 import java.util.ArrayList;

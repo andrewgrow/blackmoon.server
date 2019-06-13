@@ -1,8 +1,8 @@
 package net.robomix.blackmoon.service;
 
-import net.robomix.blackmoon.database.models.Project;
-import net.robomix.blackmoon.database.models.ProjectFile;
-import net.robomix.blackmoon.database.models.User;
+import net.robomix.blackmoon.database.models.db.Project;
+import net.robomix.blackmoon.database.models.db.ProjectFile;
+import net.robomix.blackmoon.database.models.db.User;
 import net.robomix.blackmoon.database.repos.FilesRepo;
 import net.robomix.blackmoon.database.repos.ProjectRepo;
 import net.robomix.blackmoon.utils.TextUtils;
