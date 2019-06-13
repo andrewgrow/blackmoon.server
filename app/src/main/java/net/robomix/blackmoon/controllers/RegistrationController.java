@@ -1,6 +1,7 @@
 package net.robomix.blackmoon.controllers;
 
 import net.robomix.blackmoon.database.models.db.User;
+import net.robomix.blackmoon.database.models.dto.UserDTO;
 import net.robomix.blackmoon.service.UserService;
 import net.robomix.blackmoon.utils.TextUtils;
 import org.springframework.stereotype.Controller;
@@ -25,9 +26,7 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String addUser(User userDTO,
-                          @RequestParam(name = "password_confirm") String passwordConfirm,
-                          Map<String, Object> model) {
+    public String addUser(UserDTO userDTO, Map<String, Object> model) {
         User userFromDb = userService.findByUsername(userDTO.getUsername());
         if (userFromDb != null) {
             model.put("error", "User already exists!");
@@ -39,12 +38,18 @@ public class RegistrationController {
             return "registration";
         }
 
+        userFromDb = userService.findByEmail(userDTO.getEmail());
+        if (userFromDb != null) {
+            model.put("error", "Email already in use! If it is your email, you can to log in.");
+            return "registration";
+        }
+
         if (TextUtils.isEmpty(userDTO.getPassword())) {
             model.put("error", "Password field is empty. Please, add your password.");
             return "registration";
         }
 
-        if (!userDTO.getPassword().equals(passwordConfirm)) {
+        if (!userDTO.getPassword().equals(userDTO.getMatching())) {
             model.put("error", "Password confirm does not match. " +
                     "Please, add your password and its confirm.");
             return "registration";

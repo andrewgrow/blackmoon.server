@@ -19,7 +19,7 @@ public class Utils {
 
         for (int i = 0; i < errorsList.size(); i++) {
             result.append("You have next error(s): ");
-            result.append(i).append(".").append(" ").append(errorsList.get(i));
+            result.append((i + 1)).append(".").append(" ").append(errorsList.get(i));
             if (i + 1 < errorsList.size()){
                 result.append(", ");
             }

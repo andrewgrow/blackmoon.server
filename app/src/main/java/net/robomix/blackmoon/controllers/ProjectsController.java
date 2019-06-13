@@ -2,7 +2,10 @@ package net.robomix.blackmoon.controllers;
 
 import net.robomix.blackmoon.database.models.db.Project;
 import net.robomix.blackmoon.database.models.db.User;
+import net.robomix.blackmoon.database.models.dto.ProjectDTO;
+import net.robomix.blackmoon.database.models.dto.UserDTO;
 import net.robomix.blackmoon.service.ProjectService;
+import net.robomix.blackmoon.service.UserService;
 import net.robomix.blackmoon.utils.TextUtils;
 import net.robomix.blackmoon.utils.Utils;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,24 +29,29 @@ public class ProjectsController implements HandlerExceptionResolver {
 
     private static final String TAG = ProjectsController.class.getSimpleName();
     private final ProjectService projectService;
+    private final UserService userService;
 
-    public ProjectsController(ProjectService projectService) {
+    public ProjectsController(ProjectService projectService, UserService userService) {
         this.projectService = projectService;
+        this.userService = userService;
     }
 
     @PostMapping("/projects")
     public String addNewProject(@RequestParam(value = "file", required = false) MultipartFile[] attachmentsList,
-                           @RequestParam(value = "name", required = false) String newProjectName,
-                           @RequestParam(value = "short", required = false) String shortDescription,
-                           @RequestParam(value = "long", required = false) String longDescription,
-                           @AuthenticationPrincipal User user, Map<String, Object> model) {
+                                @RequestParam(value = "name", required = false) String newProjectName,
+                                @RequestParam(value = "short", required = false) String shortDescription,
+                                @RequestParam(value = "long", required = false) String longDescription,
+                                RedirectAttributes redirectAttributes,
+                                @AuthenticationPrincipal UserDTO userDTO, Map<String, Object> model) {
 
         System.out.println(TAG + "addNewProject() in thread " + Thread.currentThread().getName());
+
+        User user = userService.findByUsername(userDTO.getUsername());
 
         List<String> errorsList = new ArrayList<>();
 
         // check name and user
-        if (newProjectName != null && user != null) {
+        if (!TextUtils.isEmpty(newProjectName) && user != null) {
 
             // save new project
             Project project = projectService.saveNewProject(newProjectName, user,
@@ -65,12 +74,12 @@ public class ProjectsController implements HandlerExceptionResolver {
             errorsList.add("Sorry, but you have to set a name for the project.");
         }
 
-        List<Project> projects = projectService.findAll();
+        List<ProjectDTO> projects = projectService.allProjectsAsDTO();
         model.put("projects", projects);
 
         if (errorsList.size() > 0) {
             String error = Utils.convertErrorsListToString(errorsList);
-            model.put("error", error);
+            redirectAttributes.addFlashAttribute("error", error);
         }
 
         return "redirect:/projects";
@@ -78,7 +87,7 @@ public class ProjectsController implements HandlerExceptionResolver {
 
     @GetMapping("/projects")
     public String projectsPage(Map<String, Object> model) {
-        List<Project> projects = projectService.findAll();
+        List<ProjectDTO> projects = projectService.allProjectsAsDTO();
         model.put("projects", projects);
         return "projects";
     }
@@ -91,7 +100,7 @@ public class ProjectsController implements HandlerExceptionResolver {
         ex.printStackTrace();
 
         ModelAndView modelAndView = new ModelAndView("projects");
-        List<Project> projects = projectService.findAll();
+        List<ProjectDTO> projects = projectService.allProjectsAsDTO();
         modelAndView.addObject("projects", projects);
         modelAndView.addObject("error", "New Project was " +
                 "not created because an error occurred. Are selected files too long?  You can " +

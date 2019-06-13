@@ -3,6 +3,7 @@ package net.robomix.blackmoon.service;
 import net.robomix.blackmoon.database.models.db.Project;
 import net.robomix.blackmoon.database.models.db.ProjectFile;
 import net.robomix.blackmoon.database.models.db.User;
+import net.robomix.blackmoon.database.models.dto.ProjectDTO;
 import net.robomix.blackmoon.database.repos.FilesRepo;
 import net.robomix.blackmoon.database.repos.ProjectRepo;
 import net.robomix.blackmoon.utils.TextUtils;
@@ -16,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectService {
@@ -29,15 +31,6 @@ public class ProjectService {
     public ProjectService(ProjectRepo projectRepo, FilesRepo filesRepo) {
         this.projectRepo = projectRepo;
         this.filesRepo = filesRepo;
-    }
-
-    public ProjectRepo repository() {
-        return this.projectRepo;
-    }
-
-
-    public List<Project> findAll() {
-        return repository().findAll();
     }
 
     public Project saveNewProject(String projectName, User user, String shortDescription,
@@ -151,5 +144,9 @@ public class ProjectService {
                 }
             }
         }
+    }
+
+    public List<ProjectDTO> allProjectsAsDTO() {
+        return projectRepo.findAll().stream().map(ProjectDTO::toDTO).collect(Collectors.toList());
     }
 }

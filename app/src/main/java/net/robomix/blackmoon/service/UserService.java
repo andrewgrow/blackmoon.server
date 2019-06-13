@@ -2,6 +2,7 @@ package net.robomix.blackmoon.service;
 
 import net.robomix.blackmoon.database.models.Role;
 import net.robomix.blackmoon.database.models.db.User;
+import net.robomix.blackmoon.database.models.dto.UserDTO;
 import net.robomix.blackmoon.database.repos.UserRepo;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,26 +28,35 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User userDB = userRepo.findByUsername(username);
-        System.out.println("SEARCH USER: name = " + userDB.getUsername() + ", role = " + userDB.getRoles());
-        return userDB;
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        User userDB = userRepo.findByUsername(userName);
+        if (userDB == null) {
+            System.out.println("try to find userName = " + (userName == null ? "null" : userName) + ". But DB returned null.");
+            throw new UsernameNotFoundException("User with name = " + userName + " does not found");
+        } else {
+            System.out.println("SEARCH USER: name = " + userDB.getUsername() + ", role = " + userDB.getRoles());
+        }
+        return UserDTO.toDto(userDB);
     }
 
     public User findByUsername(String username) {
         return userRepo.findByUsername(username);
     }
 
-    public void saveNewUser(User userWebForm) {
-        User userDB = userRepo.findByUsername(userWebForm.getUsername());
-        if (userDB == null) {
+    public User findByEmail(String email) {
+        return userRepo.findByEmail(email);
+    }
+
+    public void saveNewUser(UserDTO userDTO) {
+        User dbEntity = userRepo.findByUsername(userDTO.getUsername());
+        if (dbEntity == null) {
             User user = new User();
             user.setActive(true);
             user.setRoles(Collections.singleton(Role.USER));
-            user.setUsername(userWebForm.getUsername());
-            user.setPassword(getPasswordEncoder().encode(userWebForm.getPassword()));
-            user.setEmail(userWebForm.getEmail());
-            user.setPhone(userWebForm.getPhone());
+            user.setUsername(userDTO.getUsername());
+            user.setPassword(getPasswordEncoder().encode(userDTO.getPassword()));
+            user.setEmail(userDTO.getEmail());
+            user.setPhone(userDTO.getPhone());
             userRepo.save(user);
         }
     }

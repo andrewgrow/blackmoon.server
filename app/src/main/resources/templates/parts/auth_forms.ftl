@@ -10,7 +10,7 @@
         <div><label> Password: <input type="password" name="password" required placeholder="Your password"/> </label></div>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <#if path == "/registration">
-            <div><label> Password: <input type="password" name="password_confirm"
+            <div><label> Password: <input type="password" name="matching"
                                           required placeholder="Confirm your password"/> </label></div>
             <div><label> Email: <input type="email" name="email" required placeholder="Your email"/> </label></div>
             <div><label> Phone: <input type="text" name="phone" placeholder="Your phone"/> </label></div>

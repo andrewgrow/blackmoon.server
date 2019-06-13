@@ -1,6 +1,6 @@
 package net.robomix.blackmoon.controllers;
 
-import net.robomix.blackmoon.database.models.db.User;
+import net.robomix.blackmoon.database.models.dto.UserDTO;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +11,8 @@ import java.util.Map;
 public class DefaultPageController {
 
     @GetMapping("/")
-    public String siteEnterPage(@AuthenticationPrincipal User user, Map<String, Object> model) {
-        model.put("user", user);
+    public String siteEnterPage(@AuthenticationPrincipal UserDTO userDTO, Map<String, Object> model) {
+        model.put("user", userDTO);
         return "site_enter";
     }
 }
