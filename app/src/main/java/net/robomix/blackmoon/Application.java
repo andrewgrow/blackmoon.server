@@ -7,7 +7,7 @@ import org.springframework.context.annotation.PropertySources;
 
 @PropertySources({
         @PropertySource(value = "classpath:application.properties"),
-        @PropertySource(value = "classpath:local.properties")
+        @PropertySource(value = "classpath:common.properties")
 })
 @SpringBootApplication
 public class Application {

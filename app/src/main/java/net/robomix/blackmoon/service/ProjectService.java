@@ -5,6 +5,7 @@ import net.robomix.blackmoon.database.models.ProjectFile;
 import net.robomix.blackmoon.database.models.User;
 import net.robomix.blackmoon.database.repos.FilesRepo;
 import net.robomix.blackmoon.database.repos.ProjectRepo;
+import net.robomix.blackmoon.utils.TextUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -67,6 +68,11 @@ public class ProjectService {
         if (attachmentsList != null && attachmentsList.length > 0) {
             // cycle
             for (MultipartFile attachment : attachmentsList) {
+
+                if (TextUtils.isEmpty(attachment.getOriginalFilename())) {
+                    continue;
+                }
+
                 // check empty
                 if (attachment.isEmpty()) {
                     error = "Error. Image " + attachment.getOriginalFilename() + " was not saved. " +

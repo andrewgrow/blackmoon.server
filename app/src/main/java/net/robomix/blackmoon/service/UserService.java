@@ -17,9 +17,15 @@ import java.util.Collections;
 public class UserService implements UserDetailsService {
 
     private final UserRepo userRepo;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepo userRepo) {
+    public UserService(UserRepo userRepo, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public PasswordEncoder getPasswordEncoder() {
+        return passwordEncoder;
     }
 
     @Override
@@ -27,11 +33,6 @@ public class UserService implements UserDetailsService {
         User userDB = userRepo.findByUsername(username);
         System.out.println("SEARCH USER: name = " + userDB.getUsername() + ", role = " + userDB.getRoles());
         return userDB;
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     public User findByUsername(String username) {
@@ -45,7 +46,7 @@ public class UserService implements UserDetailsService {
             user.setActive(true);
             user.setRoles(Collections.singleton(Role.USER));
             user.setUsername(userWebForm.getUsername());
-            user.setPassword(passwordEncoder().encode(userWebForm.getPassword()));
+            user.setPassword(getPasswordEncoder().encode(userWebForm.getPassword()));
             user.setEmail(userWebForm.getEmail());
             user.setPhone(userWebForm.getPhone());
             userRepo.save(user);
