@@ -13,7 +13,7 @@ import org.springframework.context.annotation.PropertySources;
 @SpringBootApplication
 public class Application {
     public static void main(String[] args) {
-//        Sentry.capture("Application Started");
+        Sentry.capture("Application Started");
         SpringApplication.run(Application.class, args);
     }
 }
