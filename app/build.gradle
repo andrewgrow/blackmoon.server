@@ -27,3 +27,9 @@ dependencies {
     compile 'org.postgresql:postgresql:42.2.5'
     compile 'io.sentry:sentry-spring:1.7.16'
 }
+
+// /Users/grow/.gradle/wrapper/dists/gradle-4.10.3-bin/31t79e2qsceia4mkbojplrgx/gradle-4.10.3/bin/gradle clean build
+// java -jar /Users/grow/IdeaProjects/blackmoon.server/app/build/libs/blackmoon-1.0.0.jar
+
+// start script:
+// sh scripts/deploy.sh
