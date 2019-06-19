@@ -1,5 +1,12 @@
 - For opening the database on server:
     - connect ssh and print 'sudo -u postgres psql blackmoon' 
+    
+- Clear tables
+    - 'DROP TABLE IF EXISTS prj, project_file, user_role, usr CASCADE;'
+    - quit '\q'
+    
+- Clear images
+    - rm -rf /home/black/dev/blackmoon/uploads
 
 - For deploy app
     - ./scripts/deploy.sh
