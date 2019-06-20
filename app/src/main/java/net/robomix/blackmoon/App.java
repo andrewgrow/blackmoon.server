@@ -11,9 +11,9 @@ import org.springframework.context.annotation.PropertySources;
         @PropertySource(value = "classpath:common.properties")
 })
 @SpringBootApplication
-public class Application {
+public class App {
     public static void main(String[] args) {
-        Sentry.capture("Application Started");
-        SpringApplication.run(Application.class, args);
+//        Sentry.capture("Application Started");
+        SpringApplication.run(App.class, args);
     }
 }
