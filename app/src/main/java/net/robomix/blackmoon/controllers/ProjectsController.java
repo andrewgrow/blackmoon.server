@@ -4,6 +4,7 @@ import net.robomix.blackmoon.database.models.db.Project;
 import net.robomix.blackmoon.database.models.db.User;
 import net.robomix.blackmoon.database.models.dto.ProjectDTO;
 import net.robomix.blackmoon.database.models.dto.UserDTO;
+import net.robomix.blackmoon.service.MailService;
 import net.robomix.blackmoon.service.ProjectService;
 import net.robomix.blackmoon.service.UserService;
 import net.robomix.blackmoon.utils.TextUtils;
@@ -30,10 +31,13 @@ public class ProjectsController implements HandlerExceptionResolver {
     private static final String TAG = ProjectsController.class.getSimpleName();
     private final ProjectService projectService;
     private final UserService userService;
+    private final MailService mailService;
 
-    public ProjectsController(ProjectService projectService, UserService userService) {
+    public ProjectsController(ProjectService projectService, UserService userService,
+                              MailService mailService) {
         this.projectService = projectService;
         this.userService = userService;
+        this.mailService = mailService;
     }
 
     @PostMapping("/projects")
@@ -45,6 +49,8 @@ public class ProjectsController implements HandlerExceptionResolver {
                                 @AuthenticationPrincipal UserDTO userDTO, Map<String, Object> model) {
 
         System.out.println(TAG + "addNewProject() in thread " + Thread.currentThread().getName());
+
+        mailService.sendNewLetter();
 
         User user = userService.findByUsername(userDTO.getUsername());
 
