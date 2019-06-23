@@ -4,6 +4,7 @@ import net.robomix.blackmoon.database.models.Role;
 import net.robomix.blackmoon.database.models.db.User;
 import net.robomix.blackmoon.database.models.dto.UserDTO;
 import net.robomix.blackmoon.service.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
+@PreAuthorize("hasAuthority('ADMIN')")
 public class UserController {
 
     private final UserService userService;
@@ -49,11 +51,9 @@ public class UserController {
             if (allUsersRoles.contains(key)) {
                 user.getRoles().add(Role.valueOf(key));
             }
-            System.out.println("key = " + key + ", value = " + form.get(key));
         }
 
         boolean isActive = form.containsKey("active") && form.get("active").equals("on");
-
         user.setUsername(form.get("username"));
         user.setActive(isActive);
         user.setEmail(form.get("email"));
