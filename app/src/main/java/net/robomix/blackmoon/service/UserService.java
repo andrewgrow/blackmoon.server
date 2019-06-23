@@ -4,13 +4,17 @@ import net.robomix.blackmoon.database.models.Role;
 import net.robomix.blackmoon.database.models.db.User;
 import net.robomix.blackmoon.database.models.dto.UserDTO;
 import net.robomix.blackmoon.database.repos.UserRepo;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.function.Consumer;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -59,5 +63,16 @@ public class UserService implements UserDetailsService {
             user.setPhone(userDTO.getPhone());
             userRepo.save(user);
         }
+    }
+
+    public List<UserDTO> getUsersList() {
+        List<UserDTO> result = new ArrayList<>();
+        userRepo.findAll().forEach(user -> result.add(UserDTO.toDto(user)));
+        return result;
+    }
+
+    @Nullable
+    public User findById(long userId) {
+        return userRepo.findById(userId);
     }
 }
