@@ -1,10 +1,13 @@
 package net.robomix.blackmoon.database.models.dto;
 
+import net.robomix.blackmoon.database.models.Role;
 import net.robomix.blackmoon.database.models.db.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 public class UserDTO implements UserDetails {
 
@@ -15,7 +18,7 @@ public class UserDTO implements UserDetails {
     private String phone;
     private String email;
     private boolean activeUser;
-    private Collection<? extends GrantedAuthority> authorities;
+    private Set<Role> roles;
 
     @Override
     public boolean isAccountNonExpired() {
@@ -51,6 +54,11 @@ public class UserDTO implements UserDetails {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles();
     }
 
     public String getPassword() {
@@ -93,13 +101,12 @@ public class UserDTO implements UserDetails {
         this.activeUser = activeUser;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
-        this.authorities = authorities;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public static UserDTO toDto(User user) {
@@ -107,7 +114,7 @@ public class UserDTO implements UserDetails {
         userDTO.setUserId(user.getId());
         userDTO.setActiveUser(user.isActive());
         userDTO.setUsername(user.getUsername());
-        userDTO.setAuthorities(user.getAuthorities());
+        userDTO.setRoles(user.getRoles());
         userDTO.setPassword(user.getPassword());
         userDTO.setEmail(user.getEmail());
         userDTO.setPhone(user.getPhone());

@@ -7,7 +7,11 @@
         <div><p>You have been logged out. Want to login again?</p></div>
 
     <#elseif RequestParameters.error??>
-        <div><p>Invalid username and password.</p></div>
+        <#if RequestParameters.error_message??>
+            <div><p>${RequestParameters.error_message}</p></div>
+        <#else>
+            <div><p>Invalid username and password.</p></div>
+        </#if>
     <#else>
         <#if message??>
             <div><p>${message}</p></div>

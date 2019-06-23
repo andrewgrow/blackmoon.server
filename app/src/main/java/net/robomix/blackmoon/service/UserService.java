@@ -75,4 +75,11 @@ public class UserService implements UserDetailsService {
     public User findById(long userId) {
         return userRepo.findById(userId);
     }
+
+    public void saveUser(User user) {
+        if (user == null) {
+            return;
+        }
+        userRepo.save(user);
+    }
 }

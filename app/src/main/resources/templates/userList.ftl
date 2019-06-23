@@ -17,9 +17,10 @@
                 <tr>
                     <td>${user.getUserId()}</td>
                     <td>${user.getUsername()}</td>
-                    <td><#list user.getAuthorities() as role>${role}<#sep>, </#list></td>
+                    <td><#list user.getRoles() as role>${role}<#sep>, </#list></td>
                     <td>${user.getEmail()}</td>
                     <td>${user.getPhone()}</td>
+                    <td><input type="checkbox" ${user.isActiveUser()?string("checked", "")} readonly /></td>
                     <td><a href="/user/${user.getUserId()}">Edit</a> </td>
                 </tr>
             </#list>
