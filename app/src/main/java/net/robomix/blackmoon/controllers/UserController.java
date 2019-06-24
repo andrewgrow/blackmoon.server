@@ -4,6 +4,7 @@ import net.robomix.blackmoon.database.models.Role;
 import net.robomix.blackmoon.database.models.db.User;
 import net.robomix.blackmoon.database.models.dto.UserDTO;
 import net.robomix.blackmoon.service.UserService;
+import net.robomix.blackmoon.utils.TextUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,10 +43,12 @@ public class UserController {
     }
 
     @PostMapping
-    public String updateUser(@RequestParam("user_id") User user, @RequestParam Map<String, String> form, Model model) {
+    public String updateUser(@RequestParam("user_id") User user, @RequestParam Map<String, String> form,
+                             Model model) {
 
         // re-store roles
-        Set<String> allUsersRoles = Arrays.stream(Role.values()).map(Role::name).collect(Collectors.toSet());
+        Set<String> allUsersRoles = Arrays.stream(Role.values()).map(Role::name)
+                .collect(Collectors.toSet());
         user.getRoles().clear();
         for (String key : form.keySet()) {
             if (allUsersRoles.contains(key)) {
@@ -58,6 +61,13 @@ public class UserController {
         user.setActive(isActive);
         user.setEmail(form.get("email"));
         user.setPhone(form.get("phone"));
+
+        if (form.containsKey("password")) {
+            String newPass = form.get("password");
+            if (!TextUtils.isEmpty(newPass)) {
+                user.setPassword(userService.getPasswordEncoder().encode(newPass));
+            }
+        }
 
         userService.saveUser(user);
 
