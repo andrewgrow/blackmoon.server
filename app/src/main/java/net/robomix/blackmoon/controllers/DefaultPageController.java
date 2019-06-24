@@ -13,6 +13,6 @@ public class DefaultPageController {
     @GetMapping("/")
     public String siteEnterPage(@AuthenticationPrincipal UserDTO userDTO, Map<String, Object> model) {
         model.put("user", userDTO);
-        return "site_enter";
+        return "page_main";
     }
 }

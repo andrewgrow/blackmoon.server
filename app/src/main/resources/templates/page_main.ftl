@@ -1,4 +1,4 @@
-<#import "parts/common.ftl" as common>
+<#import "parts/part_common.ftl" as common>
 
 <@common.page title="Black Moon Server Side">
     <#if user??>

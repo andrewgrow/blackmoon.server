@@ -1,5 +1,5 @@
-<#import "parts/common.ftl" as common>
-<#import "parts/auth_forms.ftl" as auth_form>
+<#import "parts/part_common.ftl" as common>
+<#import "parts/part_forms.ftl" as forms>
 
 <@common.page title="Login Page | Black moon Server Side">
 
@@ -20,7 +20,7 @@
         </#if>
     </#if>
 
-    <div><p><@auth_form.login_or_registration path="/login" /></div></p>
+    <div><p><@forms.login_or_registration path="/login" /></div></p>
     <br/><br/><br/>
     <div><p><a href="/registration">REGISTRATION</div></p>
 

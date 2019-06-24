@@ -30,7 +30,7 @@ public class UserController {
     @GetMapping
     public String userList(Model model) {
         model.addAttribute("users", userService.getUsersList());
-        return "userList";
+        return "page_user";
     }
 
     @GetMapping("{user}")
@@ -39,7 +39,7 @@ public class UserController {
             model.addAttribute("user", UserDTO.toDto(user));
             model.addAttribute("roles", Role.values());
         }
-        return "userEdit";
+        return "page_edit_user";
     }
 
     @PostMapping

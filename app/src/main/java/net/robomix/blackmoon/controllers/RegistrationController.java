@@ -7,7 +7,6 @@ import net.robomix.blackmoon.utils.TextUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
@@ -22,7 +21,7 @@ public class RegistrationController {
 
     @GetMapping("/registration")
     public String registrationPage() {
-        return "registration";
+        return "page_registration";
     }
 
     @PostMapping("/registration")
@@ -30,29 +29,29 @@ public class RegistrationController {
         User userFromDb = userService.findByUsername(userDTO.getUsername());
         if (userFromDb != null) {
             model.put("error", "User already exists!");
-            return "registration";
+            return "page_registration";
         }
 
         if (TextUtils.isEmpty(userDTO.getEmail())) {
             model.put("error", "Email field is empty. Please, add your email.");
-            return "registration";
+            return "page_registration";
         }
 
         userFromDb = userService.findByEmail(userDTO.getEmail());
         if (userFromDb != null) {
             model.put("error", "Email already in use! If it is your email, you can to log in.");
-            return "registration";
+            return "page_registration";
         }
 
         if (TextUtils.isEmpty(userDTO.getPassword())) {
             model.put("error", "Password field is empty. Please, add your password.");
-            return "registration";
+            return "page_registration";
         }
 
         if (!userDTO.getPassword().equals(userDTO.getMatching())) {
             model.put("error", "Password confirm does not match. " +
                     "Please, add your password and its confirm.");
-            return "registration";
+            return "page_registration";
         }
 
         userService.saveNewUser(userDTO);

@@ -1,6 +1,5 @@
-<#import "parts/common.ftl" as common>
-<#import "parts/auth_forms.ftl" as auth_form>
-<#import "parts/forms.ftl" as forms>
+<#import "parts/part_common.ftl" as common>
+<#import "parts/part_forms.ftl" as forms>
 
 <@common.page title = "Projects Page | Black Moon Server Side">
 
@@ -42,6 +41,6 @@
     </div>
 
     <br/><br/><br/><br/><br/>
-    <div><p><@auth_form.log_out /></p></div>
+    <div><p><@forms.log_out /></p></div>
 
 </@common.page>

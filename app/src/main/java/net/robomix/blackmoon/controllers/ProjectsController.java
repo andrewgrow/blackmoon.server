@@ -95,7 +95,7 @@ public class ProjectsController implements HandlerExceptionResolver {
     public String projectsPage(Map<String, Object> model) {
         List<ProjectDTO> projects = projectService.allProjectsAsDTO();
         model.put("projects", projects);
-        return "projects";
+        return "page_projects";
     }
 
     @Override
@@ -105,7 +105,7 @@ public class ProjectsController implements HandlerExceptionResolver {
         // stacktrace
         ex.printStackTrace();
 
-        ModelAndView modelAndView = new ModelAndView("projects");
+        ModelAndView modelAndView = new ModelAndView("page_projects");
         List<ProjectDTO> projects = projectService.allProjectsAsDTO();
         modelAndView.addObject("projects", projects);
         modelAndView.addObject("error", "New Project was " +
