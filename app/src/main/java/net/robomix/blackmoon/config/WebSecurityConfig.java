@@ -60,7 +60,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    private static class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
+    private static class CustomAuthenticationFailureHandler
+            implements AuthenticationFailureHandler {
         @Override
         public void onAuthenticationFailure(
                 HttpServletRequest request,

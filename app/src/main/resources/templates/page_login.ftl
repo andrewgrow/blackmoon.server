@@ -13,11 +13,6 @@
             <div><p>Invalid username and password.</p></div>
         </#if>
     <#else>
-        <#if message??>
-            <div><p>${message}</p></div>
-        <#else>
-            <div><p>You have to login or registration.</p></div>
-        </#if>
     </#if>
 
     <div><p><@forms.login_or_registration path="/login" /></div></p>
