@@ -85,7 +85,7 @@ public class ProjectsController implements HandlerExceptionResolver {
 
         if (errorsList.size() > 0) {
             String error = Utils.convertErrorsListToString(errorsList);
-            redirectAttributes.addFlashAttribute("error", error);
+            redirectAttributes.addFlashAttribute("error_message", error);
         }
 
         return "redirect:/projects";
@@ -108,9 +108,7 @@ public class ProjectsController implements HandlerExceptionResolver {
         ModelAndView modelAndView = new ModelAndView("page_projects");
         List<ProjectDTO> projects = projectService.allProjectsAsDTO();
         modelAndView.addObject("projects", projects);
-        modelAndView.addObject("error", "New Project was " +
-                "not created because an error occurred. Are selected files too long?  You can " +
-                "add each file as 2Mb and max 6Mb per time.\n\nError message: " + ex.getMessage());
+        modelAndView.addObject("error_message", "Error message: " + ex.getMessage());
         return modelAndView;
     }
 }

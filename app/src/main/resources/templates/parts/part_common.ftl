@@ -1,3 +1,5 @@
+<#import "part_messages.ftl" as messages>
+
 <#macro page title>
     <!DOCTYPE html>
     <html lang="en">
@@ -17,15 +19,9 @@
     </head>
 
     <body>
+        <@messages.messages />
+        <br />
         <#nested>
     </body>
     </html>
-</#macro>
-
-<#macro show_error alert>
-    <div>
-        <p>
-            Error: ${alert}
-        </p>
-    </div>
 </#macro>

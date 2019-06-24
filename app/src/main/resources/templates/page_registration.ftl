@@ -3,8 +3,7 @@
 
 <@common.page title="Registration Page | Black moon Server Side">
 
-    <#if error??>
-        <div><p>${error}</p> Want to login?</div>
+    <#if error_message??>
         <div><p><@forms.login_or_registration path="/login" /></p></div>
         <div><p>or register new user:</p></div>
     </#if>

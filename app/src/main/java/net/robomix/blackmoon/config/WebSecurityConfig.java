@@ -78,9 +78,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         public void handle(HttpServletRequest request, HttpServletResponse response,
                            AccessDeniedException exception) throws IOException {
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setStatus(HttpStatus.FORBIDDEN.value());
             response.sendRedirect(request.getContextPath()
-                    + "/login?error&error_message=" + exception.getMessage());
+                    + "/?error_message=Access Denied (" + exception.getMessage() + ")");
         }
     }
 }
