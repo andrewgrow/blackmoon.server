@@ -48,9 +48,9 @@ public class ProjectsController implements HandlerExceptionResolver {
                                 RedirectAttributes redirectAttributes,
                                 @AuthenticationPrincipal UserDTO userDTO, Map<String, Object> model) {
 
-        System.out.println(TAG + "addNewProject() in thread " + Thread.currentThread().getName());
+        System.out.println(TAG + ": addNewProject() in thread " + Thread.currentThread().getName());
 
-        mailService.sendNewLetter();
+//        mailService.sendNewLetter();
 
         User user = userService.findByUsername(userDTO.getUsername());
 
