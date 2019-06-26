@@ -1,4 +1,4 @@
-package net.robomix.blackmoon.database.models;
+package net.robomix.blackmoon.database.models.db;
 
 import org.springframework.security.core.GrantedAuthority;
 

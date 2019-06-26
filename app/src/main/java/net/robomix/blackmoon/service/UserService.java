@@ -1,6 +1,6 @@
 package net.robomix.blackmoon.service;
 
-import net.robomix.blackmoon.database.models.Role;
+import net.robomix.blackmoon.database.models.db.Role;
 import net.robomix.blackmoon.database.models.db.User;
 import net.robomix.blackmoon.database.models.dto.UserDTO;
 import net.robomix.blackmoon.database.repos.UserRepo;
@@ -51,10 +51,10 @@ public class UserService implements UserDetailsService {
         return userRepo.findByEmail(email);
     }
 
-    public void saveNewUser(UserDTO userDTO) {
-        User dbEntity = userRepo.findByUsername(userDTO.getUsername());
-        if (dbEntity == null) {
-            User user = new User();
+    public User saveNewUser(UserDTO userDTO) {
+        User user = userRepo.findByUsername(userDTO.getUsername());
+        if (user == null) {
+            user = new User();
             user.setActive(false); // account will be staying inactive until administration check it
             user.setRoles(Collections.singleton(Role.USER));
             user.setUsername(userDTO.getUsername());
@@ -63,6 +63,7 @@ public class UserService implements UserDetailsService {
             user.setPhone(userDTO.getPhone());
             userRepo.save(user);
         }
+        return user;
     }
 
     public List<UserDTO> getUsersList() {

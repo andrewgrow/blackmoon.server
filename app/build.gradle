@@ -27,6 +27,7 @@ dependencies {
     compile 'org.postgresql:postgresql:42.2.5'
     compile 'io.sentry:sentry-spring:1.7.16'
     compile 'org.springframework.boot:spring-boot-starter-mail:2.1.6.RELEASE'
+    compile 'joda-time:joda-time:2.10.2'
 }
 
 // /Users/grow/.gradle/wrapper/dists/gradle-4.10.3-bin/31t79e2qsceia4mkbojplrgx/gradle-4.10.3/bin/gradle clean build

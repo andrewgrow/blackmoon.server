@@ -85,7 +85,7 @@ public class ProjectsController implements HandlerExceptionResolver {
             String error = Utils.convertErrorsListToString(errorsList);
             redirectAttributes.addFlashAttribute("error_message", error);
         } else {
-            mailService.sendNewLetter();
+            mailService.notifyNewProject();
         }
 
         return "redirect:/projects";

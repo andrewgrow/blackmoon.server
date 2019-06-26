@@ -1,6 +1,9 @@
 package net.robomix.blackmoon.service;
 
+import net.robomix.blackmoon.database.models.db.User;
+import net.robomix.blackmoon.utils.TextUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.scheduling.annotation.Async;
@@ -17,8 +20,14 @@ import java.util.Objects;
 @Service
 public class MailService {
 
-    @Autowired
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
+
+    public MailService(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
+
+    @Value("${hostname}")
+    private String hostname;
 
     private MimeMessagePreparator envelop(List<String> recipientsList, String subject, String text) {
         return mimeMessage -> {
@@ -38,26 +47,40 @@ public class MailService {
     }
 
     @Async
-    public void sendNewLetter() {
+    public void notifyNewProject() {
         List<String> recipients = new ArrayList<>();
         recipients.add("andrew.gahov@gmail.com");
         mailSender.send(envelop(recipients, "New project added to BlackMoon", "Hello, Andrew. Mail works."));
     }
 
     @Async
-    public void notifyAdminsAboutUser(List<String> allAdminsEmail) {
-        if (allAdminsEmail == null || allAdminsEmail.isEmpty()) {
+    public void notifyAboutNewRegistration(List<String> recipients, String activationCode) {
+        if (recipients == null || recipients.isEmpty() || TextUtils.isEmpty(activationCode)) {
             return;
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        System.out.println("all admins email : ");
-        for (String s : allAdminsEmail) {
-            System.out.println("--- : " + s);
-            stringBuilder.append(s).append(", ");
+        StringBuilder emailsBuilder = new StringBuilder();
+        for (String s : recipients) {
+            emailsBuilder.append(s).append(", ");
         }
         String text = "Hello. New User was registered in BlackMoon.Server, so you have to set it as active. "
                 + "\n"
-                + "The email was sent to: " + stringBuilder.toString();
-        mailSender.send(envelop(allAdminsEmail, "New User was registered in BlackMoon.Server", text));
+                + "Click here to <a href=\"" + hostname + "/activation/" + activationCode + "\">activate new user</a> " +
+                "or click here to <a href=\""+ hostname + "/user\">" + "see all users</a>."
+                + "\n"
+                + "\n"
+                + "The email was sent to: " + emailsBuilder.toString();
+        mailSender.send(envelop(recipients, "New User was registered in BlackMoon.Server", text));
+    }
+
+    @Async
+    public void notifyUserAboutActivation(User user) {
+        if (user == null || TextUtils.isEmpty(user.getEmail())) {
+            return;
+        }
+        List<String> email = new ArrayList<>();
+        email.add(user.getEmail());
+        String text = "Congratulations! Your account has been activated. You can login to site "
+                + "<a href=\"" + hostname + "/login" + "\">BlackMoon.Server</a>";
+        mailSender.send(envelop(email, "Your account is active", text));
     }
 }

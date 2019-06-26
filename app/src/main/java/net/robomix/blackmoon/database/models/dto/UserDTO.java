@@ -1,12 +1,11 @@
 package net.robomix.blackmoon.database.models.dto;
 
-import net.robomix.blackmoon.database.models.Role;
+import net.robomix.blackmoon.database.models.db.Role;
 import net.robomix.blackmoon.database.models.db.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 public class UserDTO implements UserDetails {

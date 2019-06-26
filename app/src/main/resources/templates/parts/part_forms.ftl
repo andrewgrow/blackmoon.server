@@ -1,5 +1,6 @@
 <#macro add_new_project>
     <div>
+        <p>Add new project:</p>
         <form method="POST" enctype="multipart/form-data" action="/projects">
             <table>
                 <tr><td>Project name:</td><td><input type="text" name="name" placeholder="Project name" required/></td></tr>
@@ -20,6 +21,12 @@
     </#if>
 
     <form action="${path}" method="post">
+        <#if path == "/registration">
+            <p>Registration form:</p>
+            <#elseif path == "/login">
+            <p>Login form:</p>
+        </#if>
+
         <div><label> User Name : <input type="text" name="username" required placeholder="Your name"/> </label></div>
         <div><label> Password: <input type="password" name="password" required placeholder="Your password"/> </label></div>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -34,6 +41,7 @@
 </#macro>
 
 <#macro log_out>
+    <p>Logout:</p>
     <form action="/logout" method="post">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <div> <input type="submit" value="Sign Out"/></div>

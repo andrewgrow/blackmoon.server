@@ -1,6 +1,6 @@
 package net.robomix.blackmoon.database.repos;
 
-import net.robomix.blackmoon.database.models.Role;
+import net.robomix.blackmoon.database.models.db.Role;
 import net.robomix.blackmoon.database.models.db.User;
 import org.springframework.data.repository.CrudRepository;
 

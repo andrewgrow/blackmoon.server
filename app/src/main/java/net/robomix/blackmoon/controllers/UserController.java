@@ -1,6 +1,6 @@
 package net.robomix.blackmoon.controllers;
 
-import net.robomix.blackmoon.database.models.Role;
+import net.robomix.blackmoon.database.models.db.Role;
 import net.robomix.blackmoon.database.models.db.User;
 import net.robomix.blackmoon.database.models.dto.UserDTO;
 import net.robomix.blackmoon.service.UserService;
