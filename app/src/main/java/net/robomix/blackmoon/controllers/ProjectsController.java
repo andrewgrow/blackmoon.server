@@ -50,8 +50,6 @@ public class ProjectsController implements HandlerExceptionResolver {
 
         System.out.println(TAG + ": addNewProject() in thread " + Thread.currentThread().getName());
 
-//        mailService.sendNewLetter();
-
         User user = userService.findByUsername(userDTO.getUsername());
 
         List<String> errorsList = new ArrayList<>();
@@ -86,6 +84,8 @@ public class ProjectsController implements HandlerExceptionResolver {
         if (errorsList.size() > 0) {
             String error = Utils.convertErrorsListToString(errorsList);
             redirectAttributes.addFlashAttribute("error_message", error);
+        } else {
+            mailService.sendNewLetter();
         }
 
         return "redirect:/projects";

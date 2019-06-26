@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -54,7 +55,7 @@ public class UserService implements UserDetailsService {
         User dbEntity = userRepo.findByUsername(userDTO.getUsername());
         if (dbEntity == null) {
             User user = new User();
-            user.setActive(true);
+            user.setActive(false); // account will be staying inactive until administration check it
             user.setRoles(Collections.singleton(Role.USER));
             user.setUsername(userDTO.getUsername());
             user.setPassword(getPasswordEncoder().encode(userDTO.getPassword()));
@@ -80,5 +81,9 @@ public class UserService implements UserDetailsService {
             return;
         }
         userRepo.save(user);
+    }
+
+    public List<String> getAllAdminsEmail() {
+        return userRepo.getUsersByRoles(Role.ADMIN).stream().map(User::getEmail).collect(Collectors.toList());
     }
 }

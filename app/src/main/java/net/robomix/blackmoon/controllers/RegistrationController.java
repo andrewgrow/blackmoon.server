@@ -2,11 +2,13 @@ package net.robomix.blackmoon.controllers;
 
 import net.robomix.blackmoon.database.models.db.User;
 import net.robomix.blackmoon.database.models.dto.UserDTO;
+import net.robomix.blackmoon.service.MailService;
 import net.robomix.blackmoon.service.UserService;
 import net.robomix.blackmoon.utils.TextUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
 
@@ -14,9 +16,11 @@ import java.util.Map;
 public class RegistrationController {
 
     private final UserService userService;
+    private final MailService mailService;
 
-    public RegistrationController(UserService userService) {
+    public RegistrationController(UserService userService, MailService mailService) {
         this.userService = userService;
+        this.mailService = mailService;
     }
 
     @GetMapping("/registration")
@@ -25,7 +29,7 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String addUser(UserDTO userDTO, Map<String, Object> model) {
+    public String addUser(UserDTO userDTO, Map<String, Object> model, RedirectAttributes redirectAttributes) {
         User userFromDb = userService.findByUsername(userDTO.getUsername());
         if (userFromDb != null) {
             model.put("error_message", "User already exists!");
@@ -55,9 +59,12 @@ public class RegistrationController {
         }
 
         userService.saveNewUser(userDTO);
+        mailService.notifyAdminsAboutUser(userService.getAllAdminsEmail());
 
-        model.put("info_message", "Registration successful. You can login now.");
-        model.put("username", userDTO.getUsername());
+        redirectAttributes.addFlashAttribute("info_message", String.format("Hello %s. Your registration is successful. " +
+                "But your account will be staying inactive until administration check it.", userDTO.getUsername()));
+        redirectAttributes.addFlashAttribute("username", userDTO.getUsername());
+
         return "redirect:/login";
     }
 }
