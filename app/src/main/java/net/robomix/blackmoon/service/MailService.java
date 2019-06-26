@@ -64,8 +64,8 @@ public class MailService {
         }
         String text = "Hello. New User was registered in BlackMoon.Server, so you have to set it as active. "
                 + "\n"
-                + "Click here to <a href=\"" + hostname + "/activation/" + activationCode + "\">activate new user</a> " +
-                "or click here to <a href=\""+ hostname + "/user\">" + "see all users</a>."
+                + "Click here " + hostname + "/activation/" + activationCode + " to activate new user</a> " +
+                "or click here "+ hostname + "/user>" + "to see all users."
                 + "\n"
                 + "\n"
                 + "The email was sent to: " + emailsBuilder.toString();
@@ -79,8 +79,8 @@ public class MailService {
         }
         List<String> email = new ArrayList<>();
         email.add(user.getEmail());
-        String text = "Congratulations! Your account has been activated. You can login to site "
-                + "<a href=\"" + hostname + "/login" + "\">BlackMoon.Server</a>";
+        String text = "Congratulations! Your account has been activated. You can login "
+                + hostname + "/login" + " to BlackMoon.Server";
         mailSender.send(envelop(email, "Your account is active", text));
     }
 }
