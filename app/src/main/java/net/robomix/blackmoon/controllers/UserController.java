@@ -9,11 +9,15 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static net.robomix.blackmoon.Constants.ERROR_MESSAGE;
+import static net.robomix.blackmoon.Constants.INFO_MESSAGE;
 
 @Controller
 @RequestMapping("/user")
@@ -44,7 +48,12 @@ public class UserController {
 
     @PostMapping
     public String updateUser(@RequestParam("user_id") User user, @RequestParam Map<String, String> form,
-                             Model model) {
+                             RedirectAttributes redirectAttributes) {
+
+        if (user == null) {
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE, "User has been updated successful");
+            return "redirect:/user";
+        }
 
         // re-store roles
         Set<String> allUsersRoles = Arrays.stream(Role.values()).map(Role::name)
@@ -70,7 +79,14 @@ public class UserController {
         }
 
         userService.saveUser(user);
+        redirectAttributes.addFlashAttribute(INFO_MESSAGE, "User has been updated successful");
 
         return "redirect:/user";
+    }
+
+    @DeleteMapping
+    public String deleteUser(@RequestParam("user_id") User user, @RequestParam Map<String, String> form, Model model) {
+
+        return "";
     }
 }

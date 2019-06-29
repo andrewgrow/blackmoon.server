@@ -20,6 +20,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
 
+import static net.robomix.blackmoon.Constants.ERROR_MESSAGE;
+import static net.robomix.blackmoon.Constants.INFO_MESSAGE;
+
 @Controller
 public class RegistrationController {
 
@@ -38,17 +41,17 @@ public class RegistrationController {
     public String activationPage(@PathVariable String code, Model model) {
         Activation activation = activationService.findActivationByCode(code);
         if (activation == null){
-            model.addAttribute("error_message", "Activation code is incorrect.");
+            model.addAttribute(ERROR_MESSAGE, "Activation code is incorrect.");
         } else {
             if (activation.isActivated()) {
                 DateTime lastModifiedTime = new DateTime(activation.getDateLastModified());
                 DateTimeFormatter fmt = ISODateTimeFormat.dateTime();
                 String lastModified = fmt.print(lastModifiedTime);
-                model.addAttribute("info_message", "User has been activated already (" + lastModified + ")");
+                model.addAttribute(INFO_MESSAGE, "User has been activated already (" + lastModified + ")");
             } else {
                 User user = activation.getUser();
                 if (user == null) {
-                    model.addAttribute("error_message", "User does not exist.");
+                    model.addAttribute(ERROR_MESSAGE, "User does not exist.");
                 } else {
                     user.setActive(true);
                     userService.saveUser(user);
@@ -57,7 +60,7 @@ public class RegistrationController {
                     activation.setDateLastModified(System.currentTimeMillis());
                     activationService.save(activation);
                     mailService.notifyUserAboutActivation(user);
-                    model.addAttribute("info_message", "User has been activated successful.");
+                    model.addAttribute(INFO_MESSAGE, "User has been activated successful.");
                 }
             }
         }
@@ -71,7 +74,7 @@ public class RegistrationController {
 
     @GetMapping("/activation")
     public String activationPage(Model model) {
-        model.addAttribute("error_message", "You need to select user to activation.");
+        model.addAttribute(ERROR_MESSAGE, "You need to select user to activation.");
         return "page_activation";
     }
 
@@ -79,28 +82,28 @@ public class RegistrationController {
     public String addUser(UserDTO userDTO, Map<String, Object> model, RedirectAttributes redirectAttributes) {
         User userFromDb = userService.findByUsername(userDTO.getUsername());
         if (userFromDb != null) {
-            model.put("error_message", "User already exists!");
+            model.put(ERROR_MESSAGE, "User already exists!");
             return "page_registration";
         }
 
         if (TextUtils.isEmpty(userDTO.getEmail())) {
-            model.put("error_message", "Email field is empty. Please, add your email.");
+            model.put(ERROR_MESSAGE, "Email field is empty. Please, add your email.");
             return "page_registration";
         }
 
         userFromDb = userService.findByEmail(userDTO.getEmail());
         if (userFromDb != null) {
-            model.put("error_message", "Email already in use! If it is your email, you can to log in.");
+            model.put(ERROR_MESSAGE, "Email already in use! If it is your email, you can to log in.");
             return "page_registration";
         }
 
         if (TextUtils.isEmpty(userDTO.getPassword())) {
-            model.put("error_message", "Password field is empty. Please, add your password.");
+            model.put(ERROR_MESSAGE, "Password field is empty. Please, add your password.");
             return "page_registration";
         }
 
         if (!userDTO.getPassword().equals(userDTO.getMatching())) {
-            model.put("error_message", "Password confirm does not match. " +
+            model.put(ERROR_MESSAGE, "Password confirm does not match. " +
                     "Please, add your password and its confirm.");
             return "page_registration";
         }
@@ -111,7 +114,7 @@ public class RegistrationController {
 
         System.out.println("new user was registered with code " + activateCode);
 
-        redirectAttributes.addFlashAttribute("info_message", String.format("Hello %s. Your registration is successful. " +
+        redirectAttributes.addFlashAttribute(INFO_MESSAGE, String.format("Hello %s. Your registration is successful. " +
                 "But your account will be staying inactive until administration check it.", userDTO.getUsername()));
         redirectAttributes.addFlashAttribute("username", userDTO.getUsername());
 

@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static net.robomix.blackmoon.Constants.ERROR_MESSAGE;
+
 @Controller
 public class ProjectsController implements HandlerExceptionResolver {
 
@@ -83,7 +85,7 @@ public class ProjectsController implements HandlerExceptionResolver {
 
         if (errorsList.size() > 0) {
             String error = Utils.convertErrorsListToString(errorsList);
-            redirectAttributes.addFlashAttribute("error_message", error);
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE, error);
         } else {
             mailService.notifyNewProject();
         }
@@ -108,7 +110,7 @@ public class ProjectsController implements HandlerExceptionResolver {
         ModelAndView modelAndView = new ModelAndView("page_projects");
         List<ProjectDTO> projects = projectService.allProjectsAsDTO();
         modelAndView.addObject("projects", projects);
-        modelAndView.addObject("error_message", "Error message: " + ex.getMessage());
+        modelAndView.addObject(ERROR_MESSAGE, "Error message: " + ex.getMessage());
         return modelAndView;
     }
 }

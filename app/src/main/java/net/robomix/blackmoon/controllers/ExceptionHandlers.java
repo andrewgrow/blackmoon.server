@@ -13,6 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static net.robomix.blackmoon.Constants.ERROR_MESSAGE;
+
 @Component
 @ControllerAdvice
 public class ExceptionHandlers {
@@ -21,7 +23,7 @@ public class ExceptionHandlers {
     public ModelAndView accessDenied(AccessDeniedException ex, @AuthenticationPrincipal UserDTO userDTO,
             HttpServletRequest request, HttpServletResponse response) {
         ModelAndView view = new ModelAndView(userDTO == null ? "redirect:/" : "redirect:/projects");
-        view.addObject("error_message", "403 Access Denied");
+        view.addObject(ERROR_MESSAGE, "403 Access Denied");
         view.setStatus(HttpStatus.FORBIDDEN);
         return view;
     }
@@ -30,7 +32,7 @@ public class ExceptionHandlers {
     public ModelAndView handleMaxSizeException(MaxUploadSizeExceededException exc, HttpServletRequest request,
                                                HttpServletResponse response) {
         ModelAndView view = new ModelAndView("redirect:/projects");
-        view.addObject("error_message", "Files saving error: " + exc.getMessage());
+        view.addObject(ERROR_MESSAGE, "Files saving error: " + exc.getMessage());
         view.setStatus(HttpStatus.BAD_REQUEST);
         return view;
     }
