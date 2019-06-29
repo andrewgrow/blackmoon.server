@@ -65,6 +65,29 @@
     </form>
 </#macro>
 
+<#macro update_project project>
+    <form action="/projects/edit" method="post">
+        <p>${project.getId()}</p>
+        <p><input type="text" name="name" value="${project.getName()}" /></p>
+        <p><input type="text" name="short_description" value="${project.getShortDescription()}" /></p>
+        <p><input type="text" name="long_description" value="${project.getLongDescription()}" /></p>
+        <#if project.getProjectFiles()??>
+            <div>
+                <table>
+                    <tr>
+                        <#list project.getProjectFiles() as image>
+                            <td><img width="100px;" src="/img/${image.getPath()}" /></td>
+                        </#list>
+                    </tr>
+                </table>
+            </div>
+        </#if>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        <input type="hidden" name="project_id" value="${project.getId()}"/>
+        <p><button type="submit">Save</button></p>
+    </form>
+</#macro>
+
 <#macro delete user_id>
     <form action="/user/delete" method="post">
         <input type="hidden" name="user_id" value="${user_id}"/>

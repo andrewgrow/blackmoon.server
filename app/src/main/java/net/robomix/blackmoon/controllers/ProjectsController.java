@@ -11,7 +11,9 @@ import net.robomix.blackmoon.utils.TextUtils;
 import net.robomix.blackmoon.utils.Utils;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,7 +50,8 @@ public class ProjectsController implements HandlerExceptionResolver {
                                 @RequestParam(value = "short", required = false) String shortDescription,
                                 @RequestParam(value = "long", required = false) String longDescription,
                                 RedirectAttributes redirectAttributes,
-                                @AuthenticationPrincipal UserDTO userDTO, Map<String, Object> model) {
+                                @AuthenticationPrincipal UserDTO userDTO,
+                                Map<String, Object> model) {
 
         System.out.println(TAG + ": addNewProject() in thread " + Thread.currentThread().getName());
 
@@ -112,5 +115,23 @@ public class ProjectsController implements HandlerExceptionResolver {
         modelAndView.addObject("projects", projects);
         modelAndView.addObject(ERROR_MESSAGE, "Error message: " + ex.getMessage());
         return modelAndView;
+    }
+
+    @GetMapping("/projects/{project}")
+    public String editProjectPage(@PathVariable Project project, Model model) {
+        if (project == null) {
+            model.addAttribute(ERROR_MESSAGE, "Project must be not null.");
+        } else {
+            model.addAttribute("project", ProjectDTO.toDTO(project));
+        }
+        return "page_edit_project";
+    }
+
+    @PostMapping("/projects/edit")
+    public String updateProject(@RequestParam("project_id") long projectId,
+                                @RequestParam Map<String, String> form,
+                                RedirectAttributes redirectAttributes) {
+
+        return "redirect:/projects/" + projectId;
     }
 }
