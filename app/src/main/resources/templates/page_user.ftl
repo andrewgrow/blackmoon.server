@@ -1,4 +1,5 @@
 <#import "parts/part_common.ftl" as common>
+<#import "parts/part_forms.ftl" as forms>
 
 <@common.page title="User List">
     <#if users??>
@@ -22,6 +23,10 @@
                     <td>${user.getPhone()}</td>
                     <td><input type="checkbox" ${user.isActiveUser()?string("checked", "")} readonly /></td>
                     <td><a href="/user/${user.getUserId()}">Edit</a> </td>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td>
+                        <@forms.delete user_id="${user.getUserId()}" />
+                    </td>
                 </tr>
             </#list>
         </tbody>

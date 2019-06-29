@@ -1,9 +1,12 @@
 package net.robomix.blackmoon.service;
 
+import net.robomix.blackmoon.database.models.db.Activation;
 import net.robomix.blackmoon.database.models.db.Role;
 import net.robomix.blackmoon.database.models.db.User;
 import net.robomix.blackmoon.database.models.dto.UserDTO;
+import net.robomix.blackmoon.database.repos.ActivationRepo;
 import net.robomix.blackmoon.database.repos.UserRepo;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,12 +22,14 @@ import java.util.stream.Collectors;
 @Service
 public class UserService implements UserDetailsService {
 
+    private final ActivationRepo activationRepo;
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepo userRepo, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepo userRepo, PasswordEncoder passwordEncoder, ActivationRepo activationRepo) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
+        this.activationRepo = activationRepo;
     }
 
     public PasswordEncoder getPasswordEncoder() {
@@ -72,11 +77,6 @@ public class UserService implements UserDetailsService {
         return result;
     }
 
-    @Nullable
-    public User findById(long userId) {
-        return userRepo.findById(userId);
-    }
-
     public void saveUser(User user) {
         if (user == null) {
             return;
@@ -86,5 +86,21 @@ public class UserService implements UserDetailsService {
 
     public List<String> getAllAdminsEmail() {
         return userRepo.getUsersByRoles(Role.ADMIN).stream().map(User::getEmail).collect(Collectors.toList());
+    }
+
+    public void deleteUser(User user) throws DataIntegrityViolationException {
+        if (user == null) {
+            return;
+        }
+        Activation activation = activationRepo.findActivationByUser(user);
+        if (activation != null) {
+            activationRepo.delete(activation);
+        }
+        userRepo.delete(user);
+    }
+
+    @Nullable
+    public User getUserById(long deletedUserId) {
+        return userRepo.findById(deletedUserId);
     }
 }

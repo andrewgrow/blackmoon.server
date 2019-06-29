@@ -5,7 +5,9 @@ import net.robomix.blackmoon.database.models.db.User;
 import net.robomix.blackmoon.database.models.dto.UserDTO;
 import net.robomix.blackmoon.service.UserService;
 import net.robomix.blackmoon.utils.TextUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +53,7 @@ public class UserController {
                              RedirectAttributes redirectAttributes) {
 
         if (user == null) {
-            redirectAttributes.addFlashAttribute(ERROR_MESSAGE, "User has been updated successful");
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE, "User cannot be empty");
             return "redirect:/user";
         }
 
@@ -84,9 +86,35 @@ public class UserController {
         return "redirect:/user";
     }
 
-    @DeleteMapping
-    public String deleteUser(@RequestParam("user_id") User user, @RequestParam Map<String, String> form, Model model) {
+    @PostMapping("delete")
+    public String deleteUser(@RequestParam("user_id") User user, @AuthenticationPrincipal UserDTO principal,
+                             RedirectAttributes redirectAttributes) {
+        if (user == null || principal == null) {
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE, (user == null? "User " : "Principal ") + "cannot be empty");
+            return "redirect:/user";
+        }
 
-        return "";
+        if (user.getId() == principal.getUserId()) {
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE, "You cannot be delete yourself.");
+            return "redirect:/user";
+        }
+
+        long deletedUserId = user.getId();
+        try {
+            userService.deleteUser(user);
+        } catch (DataIntegrityViolationException exception) {
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE, "You cannot remove the user because it has projects or files.");
+            return "redirect:/user";
+        }
+
+        // check delete
+        User dbUser = userService.getUserById(deletedUserId);
+        if (dbUser == null) {
+            redirectAttributes.addFlashAttribute(INFO_MESSAGE, "User has been deleted successful.");
+        } else {
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE, "User has not been deleted. See logs for errors.");
+        }
+
+        return "redirect:/user";
     }
 }
