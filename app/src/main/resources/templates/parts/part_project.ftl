@@ -34,18 +34,15 @@
 </#macro>
 
 <#macro update_project project>
-    <form action="/projects/edit" enctype="multipart/form-data" method="post">
-        <p>Project ID: ${project.getId()}</p>
-        <p><label>Project Name: <input type="text" name="name" value="${project.getName()}" /></label></p>
-        <p><label>Short Description: <input type="text" name="short_description" value="${project.getShortDescription()}" /></label></p>
-        <p><label>Long Description: <input type="text" name="long_description" value="${project.getLongDescription()}" /></label></p>
-        <p>Add files to project: <input type="file" name="file" multiple/></p>
+    <p>You can remove whole project:</p>
+    <form action="/projects/delete" method="post">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="hidden" name="project_id" value="${project.getId()}"/>
-        <p><button type="submit">Save</button></p>
+        <p><button type="submit">DELETE PROJECT</button> DANGER! It will remove all data!</p>
     </form>
+    <br /><br /><br /><br />
 
-    <br /><br /><br />
+
     <p>You can remove files from the project:</p>
     <#if project.getProjectFiles()??>
         <div>
@@ -67,12 +64,17 @@
             </table>
         </div>
     </#if>
-
     <br /><br /><br />
-    <p>You can remove whole project:</p>
-    <form action="/projects/delete" method="post">
+
+    <p>You can just update the project:</p>
+    <form action="/projects/edit" enctype="multipart/form-data" method="post">
+        <p>Project ID: ${project.getId()}</p>
+        <p><label>Project Name: <input type="text" name="name" value="${project.getName()}" /></label></p>
+        <p><label>Short Description: <input type="text" name="short_description" value="${project.getShortDescription()}" /></label></p>
+        <p><label>Long Description: <input type="text" name="long_description" value="${project.getLongDescription()}" /></label></p>
+        <p>Add new files to the project: <input type="file" name="file" multiple/></p>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="hidden" name="project_id" value="${project.getId()}"/>
-        <p><button type="submit">DELETE PROJECT</button></p>
+        <p><button type="submit">Save</button></p>
     </form>
 </#macro>
