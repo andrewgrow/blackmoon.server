@@ -12,4 +12,5 @@ public interface FilesRepo extends CrudRepository<ProjectFile, Long> {
     List<ProjectFile> findAllByAuthor(User author);
     List<ProjectFile> findAllByProject(Project project);
     List<ProjectFile> findAllByFileHash(String hash);
+    ProjectFile findById(long id);
 }

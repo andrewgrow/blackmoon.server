@@ -162,4 +162,29 @@ public class ProjectService {
         }
         projectRepo.save(project);
     }
+
+    public ProjectFile getFileById(long fileId) {
+        return filesRepo.findById(fileId);
+    }
+
+    public void removeFile(ProjectFile file) {
+        if (file == null) {
+            return;
+        }
+        filesRepo.delete(file);
+    }
+
+    public void removeProjectWithFiles(long projectId) {
+        Project project = projectRepo.findById(projectId);
+        if (project == null) {
+            return;
+        }
+        List<ProjectFile> files = filesRepo.findAllByProject(project);
+        if (files != null && files.size() > 0) {
+            for (ProjectFile file : files) {
+                filesRepo.delete(file);
+            }
+        }
+        projectRepo.delete(project);
+    }
 }

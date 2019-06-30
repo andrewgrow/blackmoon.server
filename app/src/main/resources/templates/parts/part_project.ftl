@@ -7,7 +7,9 @@
             <table>
                 <tr>
                     <#list project.getProjectFiles() as image>
-                        <td><img width="100px;" src="/img/${image.getPath()}" /></td>
+                        <td>
+                            <img width="100px;" src="/img/${image.getPath()}" />
+                        </td>
                     </#list>
                 </tr>
             </table>
@@ -33,24 +35,44 @@
 
 <#macro update_project project>
     <form action="/projects/edit" enctype="multipart/form-data" method="post">
-        <p>${project.getId()}</p>
-        <p><input type="text" name="name" value="${project.getName()}" /></p>
-        <p><input type="text" name="short_description" value="${project.getShortDescription()}" /></p>
-        <p><input type="text" name="long_description" value="${project.getLongDescription()}" /></p>
-        <#if project.getProjectFiles()??>
-            <div>
-                <table>
-                    <tr>
-                        <#list project.getProjectFiles() as image>
-                            <td><img width="100px;" src="/img/${image.getPath()}" /></td>
-                        </#list>
-                    </tr>
-                </table>
-            </div>
-        </#if>
+        <p>Project ID: ${project.getId()}</p>
+        <p><label>Project Name: <input type="text" name="name" value="${project.getName()}" /></label></p>
+        <p><label>Short Description: <input type="text" name="short_description" value="${project.getShortDescription()}" /></label></p>
+        <p><label>Long Description: <input type="text" name="long_description" value="${project.getLongDescription()}" /></label></p>
         <p>Add files to project: <input type="file" name="file" multiple/></p>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="hidden" name="project_id" value="${project.getId()}"/>
         <p><button type="submit">Save</button></p>
+    </form>
+
+    <br /><br /><br />
+    <p>You can remove files from the project:</p>
+    <#if project.getProjectFiles()??>
+        <div>
+            <table>
+                <tr>
+                    <#list project.getProjectFiles() as image>
+                        <td>
+                            <img width="100px;" src="/img/${image.getPath()}" />
+                            <br/>
+                            <form action="/projects/delete_photo" method="post">
+                                <input type="hidden" name="project_id" value="${project.getId()}" />
+                                <input type="hidden" name="photo_id" value="${image.getId()}" />
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                <button type="submit">Delete Photo</button>
+                            </form>
+                        </td>
+                    </#list>
+                </tr>
+            </table>
+        </div>
+    </#if>
+
+    <br /><br /><br />
+    <p>You can remove whole project:</p>
+    <form action="/projects/delete" method="post">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        <input type="hidden" name="project_id" value="${project.getId()}"/>
+        <p><button type="submit">DELETE PROJECT</button></p>
     </form>
 </#macro>

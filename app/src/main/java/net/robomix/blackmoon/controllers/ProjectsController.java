@@ -1,6 +1,7 @@
 package net.robomix.blackmoon.controllers;
 
 import net.robomix.blackmoon.database.models.db.Project;
+import net.robomix.blackmoon.database.models.db.ProjectFile;
 import net.robomix.blackmoon.database.models.db.User;
 import net.robomix.blackmoon.database.models.dto.ProjectDTO;
 import net.robomix.blackmoon.database.models.dto.UserDTO;
@@ -168,6 +169,41 @@ public class ProjectsController implements HandlerExceptionResolver {
         }
         redirectAttributes.addFlashAttribute("projects",
                 projectService.allProjectsAsDTO());
+        return "redirect:/projects";
+    }
+
+    @PostMapping("/projects/delete_photo")
+    public String deletePhotoFromProject(@RequestParam("project_id") long projectId,
+                                         @RequestParam("photo_id") long photoId,
+                                         RedirectAttributes redirectAttributes) {
+        if (projectId == 0 || photoId == 0) {
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE, "You need to have projectId and photoId");
+            return "redirect:/projects/" + projectId;
+        }
+
+        ProjectFile file = projectService.getFileById(photoId);
+        if (file == null) {
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE, "File with id " + photoId + " not found.");
+            return "redirect:/projects/" + projectId;
+        }
+
+        projectService.removeFile(file);
+        redirectAttributes.addFlashAttribute(INFO_MESSAGE, "File has been removed successful");
+
+        return "redirect:/projects/" + projectId;
+    }
+
+    @PostMapping("projects/delete")
+    public String deleteProject(@RequestParam("project_id") long projectId,
+                                RedirectAttributes redirectAttributes) {
+        if (projectId == 0) {
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE, "You need to have projectId.");
+            return "redirect:/projects";
+        }
+
+        projectService.removeProjectWithFiles(projectId);
+        redirectAttributes.addFlashAttribute(INFO_MESSAGE, "Project has been removed successful");
+
         return "redirect:/projects";
     }
 }

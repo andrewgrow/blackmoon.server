@@ -13,7 +13,9 @@
         <p>
             <#if projects??>
                 <#list projects as project>
-                    <@part_project.single_project project=project/> <a href="/projects/${project.getId()}">Edit</a>
+                    <@part_project.single_project project=project/>
+                    <br/><br/>
+                        <a href="/projects/${project.getId()}">Edit Project</a>
                     <br/><br/>
                 <#else>
                     <div><!-- nothing to show yet --></div>
