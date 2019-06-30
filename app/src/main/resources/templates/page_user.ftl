@@ -32,4 +32,6 @@
         </tbody>
         </table>
     </#if>
+    <br /><br /><br />
+    <a href="/projects">See Projects</a>
 </@common.page>

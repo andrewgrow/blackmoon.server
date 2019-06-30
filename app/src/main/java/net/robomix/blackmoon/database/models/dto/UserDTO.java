@@ -108,6 +108,10 @@ public class UserDTO implements UserDetails {
         this.roles = roles;
     }
 
+    public boolean isAdmin() {
+        return getRoles().contains(Role.ADMIN);
+    }
+
     public static UserDTO toDto(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setUserId(user.getId());

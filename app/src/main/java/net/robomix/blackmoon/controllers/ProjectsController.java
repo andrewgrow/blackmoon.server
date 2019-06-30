@@ -99,9 +99,10 @@ public class ProjectsController implements HandlerExceptionResolver {
     }
 
     @GetMapping("/projects")
-    public String projectsPage(Map<String, Object> model) {
+    public String projectsPage(Map<String, Object> model, @AuthenticationPrincipal UserDTO userDTO) {
         List<ProjectDTO> projects = projectService.allProjectsAsDTO();
         model.put("projects", projects);
+        model.put("user", userDTO);
         return "page_projects";
     }
 

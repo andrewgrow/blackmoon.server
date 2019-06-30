@@ -24,7 +24,13 @@
         </p>
     </div>
 
-    <br/><br/><br/><br/><br/>
+    <br/><br/><br/>
+    <#if user??>
+        <#if user.isAdmin()>
+            <a href="/user">See Users List</a>
+            <br/><br/><br/>
+        </#if>
+    </#if>
     <div><p><@forms.log_out /></p></div>
 
 </@common.page>
