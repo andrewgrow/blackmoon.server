@@ -1,7 +1,6 @@
 <#import "parts/part_common.ftl" as common>
-<#import "parts/part_forms.ftl" as forms>
-
+<#import "parts/part_project.ftl" as part_project>
 
 <@common.page title="Edit Project">
-    <@forms.update_project project=project />
+    <@part_project.update_project project=project />
 </@common.page>

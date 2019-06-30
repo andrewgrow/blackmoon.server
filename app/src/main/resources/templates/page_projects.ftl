@@ -5,7 +5,7 @@
 <@common.page title = "Projects Page | Black Moon Server Side">
     <div>
         <p>
-            <@forms.add_new_project />
+            <@part_project.add_new_project />
         </p>
     </div>
 
