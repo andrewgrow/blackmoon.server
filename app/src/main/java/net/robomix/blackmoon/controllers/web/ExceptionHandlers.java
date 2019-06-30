@@ -1,4 +1,4 @@
-package net.robomix.blackmoon.controllers;
+package net.robomix.blackmoon.controllers.web;
 
 import net.robomix.blackmoon.database.models.dto.UserDTO;
 import org.springframework.http.HttpStatus;

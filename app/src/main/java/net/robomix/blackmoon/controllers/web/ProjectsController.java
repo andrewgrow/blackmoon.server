@@ -1,4 +1,4 @@
-package net.robomix.blackmoon.controllers;
+package net.robomix.blackmoon.controllers.web;
 
 import net.robomix.blackmoon.database.models.db.Project;
 import net.robomix.blackmoon.database.models.db.ProjectFile;
