@@ -32,7 +32,7 @@
 </#macro>
 
 <#macro update_project project>
-    <form action="/projects/edit" method="post">
+    <form action="/projects/edit" enctype="multipart/form-data" method="post">
         <p>${project.getId()}</p>
         <p><input type="text" name="name" value="${project.getName()}" /></p>
         <p><input type="text" name="short_description" value="${project.getShortDescription()}" /></p>
@@ -48,6 +48,7 @@
                 </table>
             </div>
         </#if>
+        <p>Add files to project: <input type="file" name="file" multiple/></p>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="hidden" name="project_id" value="${project.getId()}"/>
         <p><button type="submit">Save</button></p>

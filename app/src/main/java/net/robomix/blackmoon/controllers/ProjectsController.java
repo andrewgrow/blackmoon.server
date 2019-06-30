@@ -130,7 +130,9 @@ public class ProjectsController implements HandlerExceptionResolver {
 
     @PostMapping("/projects/edit")
     public String updateProject(@RequestParam("project_id") long projectId,
+                                @RequestParam(value = "file", required = false) MultipartFile[] attachmentsList,
                                 @RequestParam Map<String, String> form,
+                                @AuthenticationPrincipal UserDTO userDTO,
                                 RedirectAttributes redirectAttributes) {
         Project project = projectService.getProjectById(projectId);
         if (project == null) {
@@ -150,8 +152,19 @@ public class ProjectsController implements HandlerExceptionResolver {
             project.setLongDescription(longDescr);
             project.setDateLastModified(System.currentTimeMillis());
             projectService.save(project);
-            redirectAttributes.addFlashAttribute(INFO_MESSAGE,
-                    "Project has been updated successful.");
+
+            // save files for project
+            String errorWhileSave = projectService.saveNewProjectFiles(project,
+                    attachmentsList, userService.findByUsername(userDTO.getUsername()));
+
+            // if we have an error after saving we will show it
+            if (!TextUtils.isEmpty(errorWhileSave)) {
+                redirectAttributes.addFlashAttribute(ERROR_MESSAGE,
+                        errorWhileSave);
+            } else {
+                redirectAttributes.addFlashAttribute(INFO_MESSAGE,
+                        "Project has been updated successful.");
+            }
         }
         redirectAttributes.addFlashAttribute("projects",
                 projectService.allProjectsAsDTO());
