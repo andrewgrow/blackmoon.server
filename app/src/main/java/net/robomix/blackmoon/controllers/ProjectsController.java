@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import static net.robomix.blackmoon.Constants.ERROR_MESSAGE;
+import static net.robomix.blackmoon.Constants.INFO_MESSAGE;
 
 @Controller
 public class ProjectsController implements HandlerExceptionResolver {
@@ -131,7 +132,29 @@ public class ProjectsController implements HandlerExceptionResolver {
     public String updateProject(@RequestParam("project_id") long projectId,
                                 @RequestParam Map<String, String> form,
                                 RedirectAttributes redirectAttributes) {
-
-        return "redirect:/projects/" + projectId;
+        Project project = projectService.getProjectById(projectId);
+        if (project == null) {
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE,
+                    "Project with id " + projectId + " does not exist.");
+        } else {
+            String name = form.get("name");
+            if (TextUtils.isEmpty(name.trim())) {
+                redirectAttributes.addFlashAttribute(ERROR_MESSAGE,
+                        "Project must have a name.");
+                return "redirect:/projects/" + projectId;
+            }
+            project.setName(name);
+            String shortDescr = form.get("short_description");
+            project.setShortDescription(shortDescr);
+            String longDescr = form.get("long_description");
+            project.setLongDescription(longDescr);
+            project.setDateLastModified(System.currentTimeMillis());
+            projectService.save(project);
+            redirectAttributes.addFlashAttribute(INFO_MESSAGE,
+                    "Project has been updated successful.");
+        }
+        redirectAttributes.addFlashAttribute("projects",
+                projectService.allProjectsAsDTO());
+        return "redirect:/projects";
     }
 }

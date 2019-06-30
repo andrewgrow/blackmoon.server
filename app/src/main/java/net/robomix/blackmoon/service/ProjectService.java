@@ -8,6 +8,7 @@ import net.robomix.blackmoon.database.repos.FilesRepo;
 import net.robomix.blackmoon.database.repos.ProjectRepo;
 import net.robomix.blackmoon.utils.TextUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -147,6 +148,18 @@ public class ProjectService {
     }
 
     public List<ProjectDTO> allProjectsAsDTO() {
-        return projectRepo.findAll().stream().map(ProjectDTO::toDTO).collect(Collectors.toList());
+        return projectRepo.findByOrderByDateLastModifiedDesc()
+                .stream().map(ProjectDTO::toDTO).collect(Collectors.toList());
+    }
+
+    public Project getProjectById(long projectId) {
+        return projectRepo.findById(projectId);
+    }
+
+    public void save(Project project) {
+        if (project == null) {
+            return;
+        }
+        projectRepo.save(project);
     }
 }
