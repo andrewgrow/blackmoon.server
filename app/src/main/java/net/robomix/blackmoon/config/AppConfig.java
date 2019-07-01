@@ -1,5 +1,6 @@
 package net.robomix.blackmoon.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.sentry.spring.SentryExceptionResolver;
 import io.sentry.spring.SentryServletContextInitializer;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
@@ -52,5 +53,10 @@ public class AppConfig {
         props.put("mail.debug", "true");
 
         return mailSender;
+    }
+
+    @Bean
+    public ObjectMapper getObjectMapper() {
+        return new ObjectMapper();
     }
 }

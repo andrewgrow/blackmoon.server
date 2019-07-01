@@ -8,7 +8,7 @@
                 <tr>
                     <#list project.getProjectFiles() as image>
                         <td>
-                            <img width="100px;" src="/img/${image.getPath()}" />
+                            <img width="100px;" src="${image.getPath()}" />
                         </td>
                     </#list>
                 </tr>
@@ -50,7 +50,7 @@
                 <tr>
                     <#list project.getProjectFiles() as image>
                         <td>
-                            <img width="100px;" src="/img/${image.getPath()}" />
+                            <img width="100px;" src="${image.getPath()}" />
                             <br/>
                             <form action="/projects/delete_photo" method="post">
                                 <input type="hidden" name="project_id" value="${project.getId()}" />

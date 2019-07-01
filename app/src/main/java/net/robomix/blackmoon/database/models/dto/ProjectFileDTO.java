@@ -1,15 +1,24 @@
 package net.robomix.blackmoon.database.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import net.robomix.blackmoon.Constants;
 import net.robomix.blackmoon.database.models.db.ProjectFile;
 
 public class ProjectFileDTO {
 
-    private long id;
     private String path;
+
+    @JsonIgnore
+    private long id;
+    @JsonIgnore
     private String mimeType;
+    @JsonIgnore
     private long projectId;
+    @JsonIgnore
     private long authorId;
+    @JsonIgnore
     private long dateCreated;
+    @JsonIgnore
     private String fileHash;
 
     public long getId() {
@@ -71,7 +80,7 @@ public class ProjectFileDTO {
     public static ProjectFileDTO toDto(ProjectFile file) {
         ProjectFileDTO dto = new ProjectFileDTO();
         dto.setId(file.getId());
-        dto.setPath(file.getPath());
+        dto.setPath("http://" + Constants.getHostName() + "/img/" + file.getPath());
         dto.setMimeType(file.getMimeType());
         dto.setProjectId(file.getProject().getId());
         dto.setAuthorId(file.getAuthor().getId());

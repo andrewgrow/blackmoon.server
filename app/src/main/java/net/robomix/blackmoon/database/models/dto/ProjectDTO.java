@@ -1,8 +1,8 @@
 package net.robomix.blackmoon.database.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import net.robomix.blackmoon.database.models.db.Project;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,10 +12,13 @@ public class ProjectDTO {
     private String name;
     private String shortDescription;
     private String longDescription;
-    private long authorId;
-    private long dateCreated;
-    private long dateLastModified;
     List<ProjectFileDTO> projectFiles;
+    @JsonIgnore
+    private long dateCreated;
+    @JsonIgnore
+    private long dateLastModified;
+    @JsonIgnore
+    private long authorId;
 
     public long getId() {
         return id;
