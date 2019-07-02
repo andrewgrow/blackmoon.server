@@ -93,8 +93,8 @@ public class ProjectService {
                     // check if copy was successful
                     if (destinationFile.exists()) {
                         // check if it is an image
-                        String mimeType = new MimetypesFileTypeMap().getContentType(destinationFile);
-                        if (mimeType.startsWith("image/")) {
+                        String mimeType = attachment.getContentType();
+                        if (mimeType != null && mimeType.startsWith("image/")) {
                             // Well, it's an image.
                             ProjectFile projectFile = new ProjectFile(project, fullPath, shortPath, user, mimeType);
                             filesRepo.save(projectFile);

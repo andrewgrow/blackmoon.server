@@ -1,8 +1,11 @@
 package net.robomix.blackmoon.utils;
 
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.xml.bind.DatatypeConverter;
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
@@ -40,5 +43,13 @@ public class Utils {
             e.printStackTrace();
         }
         return result;
+    }
+
+    @Nullable
+    public static String getMimeType(File file) {
+        if (file == null) {
+            return null;
+        }
+        return new MimetypesFileTypeMap().getContentType(file);
     }
 }
